@@ -8,20 +8,6 @@ public class Tower {
 	 * new default instance of parent class Tower
 	 */
 	public Tower(){}
-	
-	/**
-	 * @return the health of a tower
-	 */
-	public int getHealth() {
-		return health;
-	}
-
-	/**
-	 * @param health the health to set
-	 */
-	public void setHealth(int health) {
-		this.health = health;
-	}
 
 	/**
 	 * @return the price of the tower
@@ -125,8 +111,9 @@ public class Tower {
 	 * Give string of basic values for a tower
 	 * @return String 
 	 */
+	@Override
 	public String toString(){
-		return "health: " + this.getHealth() + ", damage: " + this.getDmg() + ", price: " + this.getPrice();
+		return "damage: " + this.getDmg() + ", price: " + this.getPrice();
 	}
 	
 	/**
@@ -134,13 +121,14 @@ public class Tower {
 	 * @param obj
 	 * @return boolean
 	 */
+	@Override
 	public boolean equals(Object obj){
 		if(!(obj instanceof Tower)){
 			return false;
 		}
 		else {
 			Tower other = (Tower)obj;
-			if(this.getHealth() == other.getHealth() && this.getDmg() == other.getDmg()){
+			if(this.getPrice() == other.getPrice() && this.getDmg() == other.getDmg()){
 				return true;
 			}
 			else{

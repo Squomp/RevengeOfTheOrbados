@@ -4,6 +4,13 @@ public class Orbo {
 
 	private int level, speed, dmg, moneyPerKill;
 	
+	/**
+	 * 
+	 * @param level must be 2, 4, or 6
+	 * @param speed at which the orbo moves
+	 * @param dmg the orbo does to main tower
+	 * @param moneyPerKill how much money is awarded to player when the orbo is destroyed
+	 */
 	public Orbo(int level, int speed, int dmg, int moneyPerKill){
 		this.setLevel(level);
 		this.setSpeed(speed);
@@ -73,6 +80,7 @@ public class Orbo {
 	 * Give string of basic values for an orbo
 	 * @return String 
 	 */
+	@Override
 	public String toString(){
 		return "level: " + this.getLevel() + ", damage: " + this.getDmg() + ", speed: " + this.getSpeed();
 	}
@@ -82,6 +90,7 @@ public class Orbo {
 	 * @param obj
 	 * @return boolean
 	 */
+	@Override
 	public boolean equals(Object obj){
 		if(!(obj instanceof Orbo)){
 			return false;
