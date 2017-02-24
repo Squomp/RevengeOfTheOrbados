@@ -69,4 +69,32 @@ public class Orbo {
 		this.moneyPerKill = moneyPerKill;
 	}
 	
+	/**
+	 * Give string of basic values for an orbo
+	 * @return String 
+	 */
+	public String toString(){
+		return "level: " + this.getLevel() + ", damage: " + this.getDmg() + ", speed: " + this.getSpeed();
+	}
+	
+	/**
+	 * Check two orbados for equality
+	 * @param obj
+	 * @return boolean
+	 */
+	public boolean equals(Object obj){
+		if(!(obj instanceof Orbo)){
+			return false;
+		}
+		else {
+			Orbo other = (Orbo)obj;
+			if(this.getLevel() == other.getLevel() && this.getSpeed() == other.getSpeed()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	}
+	
 }

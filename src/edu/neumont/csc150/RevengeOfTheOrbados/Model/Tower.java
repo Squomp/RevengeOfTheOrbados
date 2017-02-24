@@ -121,4 +121,32 @@ public class Tower {
 		this.yPos = yPos;
 	}
 	
+	/**
+	 * Give string of basic values for a tower
+	 * @return String 
+	 */
+	public String toString(){
+		return "health: " + this.getHealth() + ", damage: " + this.getDmg() + ", price: " + this.getPrice();
+	}
+	
+	/**
+	 * Check two towers for equality
+	 * @param obj
+	 * @return boolean
+	 */
+	public boolean equals(Object obj){
+		if(!(obj instanceof Tower)){
+			return false;
+		}
+		else {
+			Tower other = (Tower)obj;
+			if(this.getHealth() == other.getHealth() && this.getDmg() == other.getDmg()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	}
+	
 }
