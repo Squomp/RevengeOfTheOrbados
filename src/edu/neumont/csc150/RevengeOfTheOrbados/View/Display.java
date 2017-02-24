@@ -10,8 +10,20 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
+import edu.neumont.csc150.RevengeOfTheOrbados.Controller.GameManager;
+
 public class Display extends JPanel implements ActionListener, KeyListener, MouseListener {
 
+	private GameManager game;
+	private boolean pause = false;
+	
+	/**
+	 * create new Display instance
+	 */
+	public Display(GameManager game){
+		this.game = game;
+	}
+	
 	@Override
 	public void paint(Graphics g){
 		
@@ -61,8 +73,18 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getKeyCode() == 80){ //p
+			if (!pause) {
+				try {
+					Thread.currentThread().wait();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+			else if(pause){
+				Thread.currentThread().notify();
+			}
+		}
 	}
 
 	@Override
