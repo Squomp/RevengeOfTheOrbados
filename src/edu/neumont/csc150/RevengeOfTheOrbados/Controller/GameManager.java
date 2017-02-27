@@ -1,5 +1,7 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.Controller;
 
+import java.io.IOException;
+
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Tower;
 import edu.neumont.csc150.RevengeOfTheOrbados.View.Display;
@@ -11,8 +13,9 @@ public class GameManager {
 	
 	/**
 	 * creates default instance of GameManager
+	 * @throws IOException 
 	 */
-	public GameManager(){
+	public GameManager() throws IOException{
 		display = new Display(this);
 	}
 	

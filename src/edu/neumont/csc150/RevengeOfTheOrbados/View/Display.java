@@ -8,7 +8,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,14 +40,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
     private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
     private JFrame window;
-	
+	private BufferedImage levelBackground;
 	/**
 	 * create new Display instance
+	 * @throws IOException 
 	 */
-	public Display(GameManager game){
+	public Display(GameManager game) throws IOException{
 		this.game = game;
+		levelBackground = ImageIO.read(new File("images/LevelBackground.png"));
 	}
-
+	
 	/**
 	 * create the start menu
 	 * @param window
@@ -109,11 +115,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jProgressBar1.setBackground(new java.awt.Color(102, 255, 102));
         jProgressBar1.setForeground(new java.awt.Color(102, 255, 102));
 
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Ya Boi\\Pictures\\OOPFinal\\FastTowerBTN.png")); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("images/FastTowerBTN.png")); // NOI18N
 
-        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Ya Boi\\Pictures\\OOPFinal\\LightTowerBTN.png")); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon("images/LightTowerBTN.png")); // NOI18N
 
-        jButton3.setIcon(new javax.swing.ImageIcon("C:\\Users\\Ya Boi\\Pictures\\OOPFinal\\HeavyTowerBTN.png")); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon("images/HeavyTowerBTN.png")); // NOI18N
+        
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
         jButton4.setText("Upgrade Tower");
@@ -248,10 +255,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         }
 
     }
-
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
+		g.drawImage(levelBackground, jPanel1.getX(), jPanel1.getY(), this);
 	}
 	
 	@Override
