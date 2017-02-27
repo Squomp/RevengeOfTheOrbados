@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -237,8 +238,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource()=="lightTowerBTN"){
+			
+		}
 	}
 
 	@Override
