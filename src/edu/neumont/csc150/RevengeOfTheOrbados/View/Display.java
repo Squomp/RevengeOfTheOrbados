@@ -7,9 +7,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import edu.neumont.csc150.RevengeOfTheOrbados.Controller.GameManager;
 
@@ -17,6 +20,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	private GameManager game;
 	private boolean pause = false;
+	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
+	
 	
 	private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -36,9 +41,20 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	 */
 	public Display(GameManager game){
 		this.game = game;
-		initComponents();
 	}
 
+	/**
+	 * create the start menu
+	 * @param window
+	 */
+	public void initializeStartMenu(JFrame window){
+		Object options[] = {"Start", "Exit"};
+		int choice = JOptionPane.showOptionDialog(window, "Are you ready to start?", "Menu", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		if(choice == JOptionPane.CLOSED_OPTION || choice == 1){
+			System.exit(1);
+		}
+	}
+	
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,7 +62,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
+    public void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -60,9 +76,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jButton5 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         window = new JFrame();
-
+        initializeStartMenu(window);
+        
         window.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        window.addKeyListener(this);
         window.setTitle("Revenge of the Orbados");
         setBounds(new java.awt.Rectangle(0, 0, 2560, 1440));
         setPreferredSize(new java.awt.Dimension(1920, 1080));
@@ -232,7 +250,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void paint(Graphics g){
-		
+		super.paint(g);
 	}
 	
 	@Override
@@ -295,7 +313,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
