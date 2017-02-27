@@ -4,7 +4,6 @@ import edu.neumont.csc150.RevengeOfTheOrbados.Model.Tower;
 import edu.neumont.csc150.RevengeOfTheOrbados.View.Display;
 
 public class GameManager {
-
 	private Display display;
 	private boolean gameOver;
 	
