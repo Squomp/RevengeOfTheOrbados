@@ -69,7 +69,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     public void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = this;
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -113,11 +113,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jProgressBar1.setBackground(new java.awt.Color(102, 255, 102));
         jProgressBar1.setForeground(new java.awt.Color(102, 255, 102));
 
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Ya Boi\\Pictures\\OOPFinal\\FastTowerBTN.png")); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("images\\FastTowerBTN.png")); // NOI18N
 
-        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Ya Boi\\Pictures\\OOPFinal\\LightTowerBTN.png")); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon("images\\LightTowerBTN.png")); // NOI18N
 
-        jButton3.setIcon(new javax.swing.ImageIcon("C:\\Users\\Ya Boi\\Pictures\\OOPFinal\\HeavyTowerBTN.png")); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon("images\\HeavyTowerBTN.png")); // NOI18N
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
         jButton4.setText("Upgrade Tower");
@@ -221,6 +221,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jPanel1.getAccessibleContext().setAccessibleName("gamePanel");
         jPanel2.getAccessibleContext().setAccessibleName("menuPanel");
 
+        window.getContentPane().add(jPanel1);
         window.pack();
         window.setVisible(true);
         
@@ -263,6 +264,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			g.setColor(Color.GREEN);
 			g.fillOval(orbo.getxPos(), orbo.getyPos(), 80, 80);
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.orboSpawnTimer){
+			orbos.add(game.wave());
+		}
+		this.repaint();
 	}
 	
 	@Override
@@ -323,13 +332,4 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == this.orboSpawnTimer){
-			orbos.add(game.wave());
-		}
-		this.repaint();
-	}
-
 }
