@@ -52,11 +52,16 @@ public class GameManager {
 	
 	public Orbo wave(){
 		Orbo o1 = new Orbo(1, 1, 50, 30);
+<<<<<<< HEAD
 		Random r = new Random();
 		int x = r.nextInt(1000);
 		int y = r.nextInt(1000);
 		o1.setxPos(x);
 		o1.setyPos(y);
+=======
+		o1.setyPos(100);
+		o1.setxPos(100);
+>>>>>>> 6f333b1b01d9f2ba82371dae0048b5208490b521
 		return o1;
 	}
 	
