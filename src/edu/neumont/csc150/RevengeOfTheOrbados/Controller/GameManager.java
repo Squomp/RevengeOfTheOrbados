@@ -12,7 +12,7 @@ public class GameManager {
 	 * creates default instance of GameManager
 	 */
 	public GameManager(){
-		
+		display = new Display(this);
 	}
 	
 	/**
