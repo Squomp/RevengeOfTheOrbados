@@ -1,5 +1,6 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.View;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,9 +9,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+<<<<<<< HEAD
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+=======
+import java.util.ArrayList;
+>>>>>>> dafb277c30e75a36802744b76517897c129500c2
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -20,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import edu.neumont.csc150.RevengeOfTheOrbados.Controller.GameManager;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 
 public class Display extends JPanel implements ActionListener, KeyListener, MouseListener {
 
@@ -27,6 +33,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private boolean pause = false;
 	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
 	
+	private ArrayList<Orbo> orbos = new ArrayList<>();
 	
 	private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -71,7 +78,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     public void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = this;
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -115,12 +122,20 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jProgressBar1.setBackground(new java.awt.Color(102, 255, 102));
         jProgressBar1.setForeground(new java.awt.Color(102, 255, 102));
 
+<<<<<<< HEAD
         jButton1.setIcon(new javax.swing.ImageIcon("images/FastTowerBTN.png")); // NOI18N
 
         jButton2.setIcon(new javax.swing.ImageIcon("images/LightTowerBTN.png")); // NOI18N
 
         jButton3.setIcon(new javax.swing.ImageIcon("images/HeavyTowerBTN.png")); // NOI18N
         
+=======
+        jButton1.setIcon(new javax.swing.ImageIcon("images\\FastTowerBTN.png")); // NOI18N
+
+        jButton2.setIcon(new javax.swing.ImageIcon("images\\LightTowerBTN.png")); // NOI18N
+
+        jButton3.setIcon(new javax.swing.ImageIcon("images\\HeavyTowerBTN.png")); // NOI18N
+>>>>>>> dafb277c30e75a36802744b76517897c129500c2
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
         jButton4.setText("Upgrade Tower");
@@ -224,8 +239,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jPanel1.getAccessibleContext().setAccessibleName("gamePanel");
         jPanel2.getAccessibleContext().setAccessibleName("menuPanel");
 
+        window.getContentPane().add(jPanel1);
         window.pack();
         window.setVisible(true);
+        
+        orboSpawnTimer = new Timer(1000, this);
+        orboSpawnTimer.start();
     }// </editor-fold>                        
 
     /**
@@ -258,7 +277,22 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
+<<<<<<< HEAD
 		g.drawImage(levelBackground, jPanel1.getX(), jPanel1.getY(), this);
+=======
+		for(Orbo orbo: orbos){
+			g.setColor(Color.GREEN);
+			g.fillOval(orbo.getxPos(), orbo.getyPos(), 80, 80);
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.orboSpawnTimer){
+			orbos.add(game.newOrbo());
+		}
+		this.repaint();
+>>>>>>> dafb277c30e75a36802744b76517897c129500c2
 	}
 	
 	@Override
@@ -319,10 +353,4 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-	}
-
 }
