@@ -1,5 +1,6 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.View;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import edu.neumont.csc150.RevengeOfTheOrbados.Controller.GameManager;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 
 public class Display extends JPanel implements ActionListener, KeyListener, MouseListener {
 
@@ -22,6 +25,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private boolean pause = false;
 	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
 	
+	private ArrayList<Orbo> orbos = new ArrayList<>();
 	
 	private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -218,6 +222,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
         window.pack();
         window.setVisible(true);
+        
+        orboSpawnTimer = new Timer(1000, this);
+        orboSpawnTimer.start();
     }// </editor-fold>                        
 
     /**
@@ -251,6 +258,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
+		for(Orbo orbo: orbos){
+			g.setColor(Color.GREEN);
+			g.fillOval(orbo.getxPos(), orbo.getyPos(), 80, 80);
+		}
 	}
 	
 	@Override
@@ -313,7 +324,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		if(e.getSource() == this.orboSpawnTimer){
+			orbos.add(game.wave());
+		}
+		this.repaint();
 	}
 
 }

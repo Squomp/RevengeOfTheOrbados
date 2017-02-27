@@ -1,5 +1,7 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.Controller;
 
+import java.util.Random;
+
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Tower;
 import edu.neumont.csc150.RevengeOfTheOrbados.View.Display;
@@ -50,8 +52,11 @@ public class GameManager {
 	
 	public Orbo wave(){
 		Orbo o1 = new Orbo(1, 1, 50, 30);
-		o1.setxPos(100);
-		o1.setyPos(100);
+		Random r = new Random();
+		int x = r.nextInt(1000);
+		int y = r.nextInt(1000);
+		o1.setxPos(x);
+		o1.setyPos(y);
 		return o1;
 	}
 	
