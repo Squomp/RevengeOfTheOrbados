@@ -53,7 +53,7 @@ public class GameManager {
 	public Orbo newOrbo(){
 		Orbo o = new Orbo(1, 1, 50, 30);
 		Random r = new Random();
-		int x = r.nextInt(-90);
+		int x = r.nextInt(10);
 		int y = r.nextInt(815);
 		o.setxPos(x);
 		o.setyPos(y);
