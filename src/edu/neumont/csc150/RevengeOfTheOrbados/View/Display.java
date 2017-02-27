@@ -1,6 +1,7 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.View;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,8 +10,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -22,7 +25,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private GameManager game;
 	private boolean pause = false;
 	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
-	
+	private Image lightTower,heavyTower,fastTower = null;
 	
 	private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -257,7 +260,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(e.getSource()=="lightTowerBTN"){
-			
+			lightTower = new ImageIcon("images/LightTowerIcon.png").getImage();
 		}
 	}
 
