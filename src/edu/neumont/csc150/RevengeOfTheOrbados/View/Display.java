@@ -1,9 +1,5 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.View;
 
-<<<<<<< HEAD
-public class Display {
-	
-=======
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -319,6 +315,4 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	public void actionPerformed(ActionEvent e) {
 		
 	}
-
->>>>>>> origin/master
 }
