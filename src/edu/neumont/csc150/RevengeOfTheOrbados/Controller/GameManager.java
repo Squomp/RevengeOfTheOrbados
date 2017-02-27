@@ -50,11 +50,11 @@ public class GameManager {
 		
 	}
 	
-	public Orbo wave(){
+	public Orbo newOrbo(){
 		Orbo o = new Orbo(1, 1, 50, 30);
 		Random r = new Random();
-		int x = r.nextInt(1000);
-		int y = r.nextInt(1000);
+		int x = r.nextInt(-90);
+		int y = r.nextInt(815);
 		o.setxPos(x);
 		o.setyPos(y);
 		return o;

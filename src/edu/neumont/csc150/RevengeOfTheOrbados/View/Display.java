@@ -269,7 +269,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.orboSpawnTimer){
-			orbos.add(game.wave());
+			orbos.add(game.newOrbo());
 		}
 		this.repaint();
 	}
