@@ -2,8 +2,15 @@ package edu.neumont.csc150.RevengeOfTheOrbados.Model;
 
 public class Orbo {
 
-	private int level, speed, dmg, moneyPerKill;
+	private int level, speed, dmg, moneyPerKill, xPos, yPos, width, height;
 	
+	/**
+	 * 
+	 * @param level must be 2, 4, or 6
+	 * @param speed at which the orbo moves
+	 * @param dmg the orbo does to main tower
+	 * @param moneyPerKill how much money is awarded to player when the orbo is destroyed
+	 */
 	public Orbo(int level, int speed, int dmg, int moneyPerKill){
 		this.setLevel(level);
 		this.setSpeed(speed);
@@ -67,6 +74,92 @@ public class Orbo {
 	 */
 	public void setMoneyPerKill(int moneyPerKill) {
 		this.moneyPerKill = moneyPerKill;
+	}
+	
+	/**
+	 * @return the xPos
+	 */
+	public int getxPos() {
+		return xPos;
+	}
+	
+	/**
+	 * @param xPos the xPos to set
+	 */
+	public void setxPos(int xPos) {
+		this.xPos = xPos;
+	}
+	
+	/**
+	 * @return the yPos
+	 */
+	public int getyPos() {
+		return yPos;
+	}
+	
+	/**
+	 * @param yPos the yPos to set
+	 */
+	public void setyPos(int yPos) {
+		this.yPos = yPos;
+	}
+	
+	/**
+	 * @return the width
+	 */
+	public int getWidth() {
+		return width;
+	}
+
+	/**
+	 * @param width the width to set
+	 */
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * @param height the height to set
+	 */
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	/**
+	 * Give string of basic values for an orbo
+	 * @return String 
+	 */
+	@Override
+	public String toString(){
+		return "level: " + this.getLevel() + ", damage: " + this.getDmg() + ", speed: " + this.getSpeed();
+	}
+	
+	/**
+	 * Check two orbados for equality
+	 * @param obj
+	 * @return boolean
+	 */
+	@Override
+	public boolean equals(Object obj){
+		if(!(obj instanceof Orbo)){
+			return false;
+		}
+		else {
+			Orbo other = (Orbo)obj;
+			if(this.getLevel() == other.getLevel() && this.getSpeed() == other.getSpeed()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 	}
 	
 }

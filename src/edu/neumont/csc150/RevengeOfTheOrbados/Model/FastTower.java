@@ -2,8 +2,7 @@ package edu.neumont.csc150.RevengeOfTheOrbados.Model;
 
 public class FastTower extends Tower{
 	
-	//private final int HEALTH, PRICE, DMG, UPGRADE_PRICE, SELL_PRICE, ATTACK_SPEED, XPOS, YPOS;
-	
+	private final int PRICE = 300, DMG = 1, UPGRADE_PRICE = 200, SELL_PRICE = 200, ATTACK_SPEED = 300;
 	
 	/**
 	 * new default intsance of level 1 FastTower
