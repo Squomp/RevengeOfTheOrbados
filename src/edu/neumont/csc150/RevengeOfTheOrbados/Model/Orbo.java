@@ -2,7 +2,7 @@ package edu.neumont.csc150.RevengeOfTheOrbados.Model;
 
 public class Orbo {
 
-	private int level, speed, dmg, moneyPerKill, xPos, yPos, width = 80, height = 80;
+	private int level, speed, dmg, moneyPerKill, xPos, yPos, width = 70, height = 65;
 	
 	/**
 	 * 

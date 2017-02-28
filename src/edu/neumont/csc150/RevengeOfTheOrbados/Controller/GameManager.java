@@ -14,6 +14,7 @@ public class GameManager {
 
 	private Display display;
 	private boolean gameOver;
+	private Random r = new Random();
 	
 	/**
 	 * creates default instance of GameManager
@@ -82,18 +83,10 @@ public class GameManager {
 	 * @return the orbo
 	 */
 	public Orbo newOrbo(int level){
-		if (level == 2 || level == 4 || level == 6) {
-			Orbo o = new Orbo(level, 1, 50, 30);
-			Random r = new Random();
-			int x = r.nextInt(10);
-			int y = r.nextInt(815);
-			o.setxPos(x);
-			o.setyPos(y);
+			Orbo o = new Orbo(level, 1, 5, 30);
+			o.setxPos(25);
+			o.setyPos(615);
 			return o;
-		}
-		else{
-			return null;
-		}
 	}
 	
 	public void gameOver(){

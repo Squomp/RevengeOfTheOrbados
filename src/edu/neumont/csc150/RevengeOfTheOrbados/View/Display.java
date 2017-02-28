@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -39,11 +40,13 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
 	private Image lightTower,heavyTower,fastTower = null;
 	private ArrayList<Orbo> orbos = new ArrayList<>();
+	private Random r = new Random();
+	private boolean possibleLevelValue;
 	
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
 	Point yLocation=MouseInfo.getPointerInfo().getLocation();
 	
-	private int height=200,width =200,x,y;
+	private int height=200, width =200, x, y;
 	
 	private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -101,7 +104,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jButton5 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         window = new JFrame();
-        initializeStartMenu(window);
+        //initializeStartMenu(window);
         
         window.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -246,13 +249,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
         jPanel1.getAccessibleContext().setAccessibleName("gamePanel");
         jPanel2.getAccessibleContext().setAccessibleName("menuPanel");
-
+        
         window.getContentPane().add(jPanel1);
         window.pack();
         window.setVisible(true);
         
         orboSpawnTimer = new Timer(1000, this);
-        //orboSpawnTimer.start();
+        orboSpawnTimer.start();
+        
+        orboMoveTimer = new Timer(1, this);
+        orboMoveTimer.start();
     }// </editor-fold>                        
 
     /**
@@ -285,10 +291,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
-		g.drawImage(levelBackground, jPanel1.getX(), jPanel1.getY(), this);
+		// square width = 90 height = 74
+		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), 1800, 1258, this);
 		for(Orbo orbo: orbos){
 			g.setColor(Color.GREEN);
-			g.fillOval(orbo.getxPos(), orbo.getyPos(), 80, 80);
+			g.fillOval(orbo.getxPos(), orbo.getyPos(), orbo.getWidth(), orbo.getHeight());
 		}
 //		if(lightTowerClicked == true){
 //			g.drawImage(lightTower, x, y, this);
@@ -297,8 +304,28 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == this.orboSpawnTimer){
-			orbos.add(game.newOrbo());
+		int orboSpeed = 4;
+		if (e.getSource() == this.orboSpawnTimer) {
+			while (!possibleLevelValue) {
+				int x = r.nextInt(6) + 2;
+				if(x == 2 || x == 4 || x == 6){
+					possibleLevelValue = true;
+				}
+			}
+			orbos.add(game.newOrbo(x));
+		}
+		if (e.getSource() == this.orboMoveTimer){
+			for(Orbo orbo: orbos){
+				if (orbo.getxPos() > 24 && orbo.getxPos() < 205 && orbo.getyPos() > 614 && orbo.getyPos() < 690) {
+					orbo.setxPos(orbo.getxPos() + orboSpeed);
+				}
+				else if (orbo.getxPos() >= 205 && orbo.getxPos() <= 215 && orbo.getyPos() > 102){
+					orbo.setyPos(orbo.getyPos() - orboSpeed);
+				}
+				else if (orbo.getxPos() >= 205 && orbo.getxPos() < 480 && orbo.getyPos() < 180){
+					orbo.setxPos(orbo.getxPos() + orboSpeed);
+				}
+			}
 		}
 		this.repaint();
 	}
