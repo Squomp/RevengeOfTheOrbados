@@ -3,12 +3,15 @@ package edu.neumont.csc150.RevengeOfTheOrbados.View;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
@@ -29,13 +32,18 @@ import javax.swing.Timer;
 import edu.neumont.csc150.RevengeOfTheOrbados.Controller.GameManager;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 
-public class Display extends JPanel implements ActionListener, KeyListener, MouseListener {
+public class Display extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
 	private GameManager game;
 	private boolean pause = false;
 	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
 	private Image lightTower,heavyTower,fastTower = null;
 	private ArrayList<Orbo> orbos = new ArrayList<>();
+	
+	Point xLocation = MouseInfo.getPointerInfo().getLocation();
+	Point yLocation=MouseInfo.getPointerInfo().getLocation();
+	
+	private int height=200,width =200,x,y;
 	
 	private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -50,6 +58,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
     private javax.swing.JProgressBar jProgressBar1;
     private JFrame window;
 	private BufferedImage levelBackground;
+	private boolean lightTowerClicked = false;
 	/**
 	 * create new Display instance
 	 * @throws IOException 
@@ -281,6 +290,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			g.setColor(Color.GREEN);
 			g.fillOval(orbo.getxPos(), orbo.getyPos(), 80, 80);
 		}
+//		if(lightTowerClicked == true){
+//			g.drawImage(lightTower, x, y, this);
+//		}
 	}
 
 	@Override
@@ -293,9 +305,20 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(e.getSource()=="lightTowerBTN"){
-			lightTower = new ImageIcon("images/LightTowerIcon.png").getImage();
-		}
+//		if(e.getSource()=="lightTowerBTN"){
+//			lightTower = new ImageIcon("images/LightTowerIcon.png").getImage();
+//			
+//			repaint();
+//		}
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent arg0){
+//		if(lightTowerClicked){
+//	           x = arg0.getX() - (width / 2);
+//	            y = arg0.getY() - (height / 2);
+//	            this.repaint();
+//	            }
 	}
 
 	@Override
@@ -318,10 +341,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+//        if(e.getX() > x && e.getX() < (x + width) && e.getY() > y && e.getY() < (y + height)){
+//			lightTowerClicked = true;
+//        }
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
-
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -349,4 +378,5 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 	}
+
 }
