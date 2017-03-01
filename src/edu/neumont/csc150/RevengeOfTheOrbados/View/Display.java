@@ -329,24 +329,60 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		if (e.getSource() == this.orboSpawnTimer) {
 			while (!possibleLevelValue) {
 				int x = r.nextInt(6) + 2;
-				if (x == 2 || x == 4 || x == 6) {
+				if(x == 2 || x == 4 || x == 6){
 					possibleLevelValue = true;
 				}
 			}
 			orbos.add(game.newOrbo(x));
 		}
-		if (e.getSource() == this.orboMoveTimer) {
-			for (Orbo orbo : orbos) {
-				if (orbo.getxPos() > 24 && orbo.getxPos() < 205 && orbo.getyPos() > 614 && orbo.getyPos() < 690) {
-					orbo.setxPos(orbo.getxPos() + orboSpeed);
-				} else if (orbo.getxPos() >= 205 && orbo.getxPos() <= 215 && orbo.getyPos() > 102) {
-					orbo.setyPos(orbo.getyPos() - orboSpeed);
-				} else if (orbo.getxPos() >= 205 && orbo.getxPos() < 480 && orbo.getyPos() < 180) {
-					orbo.setxPos(orbo.getxPos() + orboSpeed);
-				} else if (orbo.getxPos() >= 480 && orbo.getxPos() < 490 && orbo.getyPos() < 833) {
-					orbo.setyPos(orbo.getyPos() + orboSpeed);
-				} else if (orbo.getxPos() > 120 && orbo.getxPos() < 490 && orbo.getyPos() < 840) {
-
+		if (e.getSource() == this.orboMoveTimer){
+			for(int i = 0; i < orbos.size(); i++){
+				if (orbos.get(i).getxPos() > 24 && orbos.get(i).getxPos() < 205 && orbos.get(i).getyPos() > 614 && orbos.get(i).getyPos() < 690) {
+					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 205 && orbos.get(i).getxPos() <= 215 && orbos.get(i).getyPos() > 102 && orbos.get(i).getyPos() < 690){
+					orbos.get(i).setyPos(orbos.get(i).getyPos() - orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 205 && orbos.get(i).getxPos() < 480 && orbos.get(i).getyPos() < 180){
+					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 480 && orbos.get(i).getxPos() < 490 && orbos.get(i).getyPos() < 833){
+					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() > 120 && orbos.get(i).getxPos() < 490 && orbos.get(i).getyPos() < 840 && orbos.get(i).getyPos() > 830){
+					orbos.get(i).setxPos(orbos.get(i).getxPos() - orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() > 100 && orbos.get(i).getxPos() < 205 && orbos.get(i).getyPos() < 1128){
+					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() < 745 && orbos.get(i).getyPos() > 1128){
+					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 745 && orbos.get(i).getxPos() < 755 && orbos.get(i).getyPos() > 97){
+					orbos.get(i).setyPos(orbos.get(i).getyPos() - orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 745 && orbos.get(i).getxPos() < 1020){
+					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() > 1020 && orbos.get(i).getxPos() < 1030 && orbos.get(i).getyPos() < 1128){
+					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() > 1020 && orbos.get(i).getxPos() < 1285){
+					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 1285 && orbos.get(i).getxPos() < 1290 && orbos.get(i).getyPos() > 100){
+					orbos.get(i).setyPos(orbos.get(i).getyPos() - orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 1285 && orbos.get(i).getxPos() <= 1555){
+					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
+				}
+				else if (orbos.get(i).getxPos() >= 1555 && orbos.get(i).getyPos() < 1000){
+					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
+				}
+				
+				if(orbos.get(i).getxPos() >= 1555 && orbos.get(i).getyPos() < 990 && orbos.get(i).getyPos() > 980){
+					orbos.remove(i);
+					game.towerLoseHealth(orbos.get(i));
 				}
 			}
 		}
