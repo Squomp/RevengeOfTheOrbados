@@ -9,13 +9,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
-<<<<<<< HEAD
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-=======
 import java.util.ArrayList;
->>>>>>> dafb277c30e75a36802744b76517897c129500c2
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -122,20 +119,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jProgressBar1.setBackground(new java.awt.Color(102, 255, 102));
         jProgressBar1.setForeground(new java.awt.Color(102, 255, 102));
 
-<<<<<<< HEAD
         jButton1.setIcon(new javax.swing.ImageIcon("images/FastTowerBTN.png")); // NOI18N
 
         jButton2.setIcon(new javax.swing.ImageIcon("images/LightTowerBTN.png")); // NOI18N
 
         jButton3.setIcon(new javax.swing.ImageIcon("images/HeavyTowerBTN.png")); // NOI18N
         
-=======
         jButton1.setIcon(new javax.swing.ImageIcon("images\\FastTowerBTN.png")); // NOI18N
 
         jButton2.setIcon(new javax.swing.ImageIcon("images\\LightTowerBTN.png")); // NOI18N
 
         jButton3.setIcon(new javax.swing.ImageIcon("images\\HeavyTowerBTN.png")); // NOI18N
->>>>>>> dafb277c30e75a36802744b76517897c129500c2
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
         jButton4.setText("Upgrade Tower");
@@ -277,9 +271,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
-<<<<<<< HEAD
 		g.drawImage(levelBackground, jPanel1.getX(), jPanel1.getY(), this);
-=======
 		for(Orbo orbo: orbos){
 			g.setColor(Color.GREEN);
 			g.fillOval(orbo.getxPos(), orbo.getyPos(), 80, 80);
@@ -292,7 +284,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			orbos.add(game.newOrbo());
 		}
 		this.repaint();
->>>>>>> dafb277c30e75a36802744b76517897c129500c2
 	}
 	
 	@Override

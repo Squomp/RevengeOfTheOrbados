@@ -1,10 +1,10 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.Controller;
 
-<<<<<<< HEAD
+
 import java.io.IOException;
-=======
+
 import java.util.Random;
->>>>>>> dafb277c30e75a36802744b76517897c129500c2
+
 
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Tower;
