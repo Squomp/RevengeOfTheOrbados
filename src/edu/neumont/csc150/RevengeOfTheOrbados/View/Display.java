@@ -42,7 +42,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private ArrayList<Orbo> orbos = new ArrayList<>();
 	private Random r = new Random();
 	private boolean possibleLevelValue;
-	private int towerHealth = 100;
 	
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
 	Point yLocation=MouseInfo.getPointerInfo().getLocation();
@@ -60,8 +59,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JFrame window;
+    private JFrame window;
 	private BufferedImage levelBackground;
 	private boolean lightTowerClicked = false;
 	/**
@@ -105,10 +103,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         window = new JFrame();
         //initializeStartMenu(window);
-        jLabel4.setText("Tower Health" + towerHealth);
+        
         window.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         window.addKeyListener(this);
@@ -123,15 +120,13 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4)
-            .addGap(500, 2003, Short.MAX_VALUE)
+            .addGap(0, 2003, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4)
-            .addGap(500, 1710, Short.MAX_VALUE)
+            .addGap(0, 1710, Short.MAX_VALUE)
         );
-        jLabel4.setLocation(jPanel1.getWidth() - 250, jPanel1.getHeight()- 100);
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
         jLabel1.setText("Round Progress");
 
@@ -230,7 +225,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
         jButton4.getAccessibleContext().setAccessibleName("upgradeTowerBTN");
         jButton5.getAccessibleContext().setAccessibleName("sellTowerBTN");
         jLabel3.getAccessibleContext().setAccessibleName("moneyLBL");
-        jLabel4.getAccessibleContext().setAccessibleName("towerHealthLBL");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(window.getContentPane());
         window.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
