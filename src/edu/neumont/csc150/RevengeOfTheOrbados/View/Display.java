@@ -425,7 +425,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	}
 
 	/**
-	 * creates new palce-able light tower
+	 * creates new place-able light tower
 	 * @param x
 	 * @param y
 	 * @return
