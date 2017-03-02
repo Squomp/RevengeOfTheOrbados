@@ -337,12 +337,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 						this);
 			}
 		}
+		
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
 						this);
 			}
 		}
+		
 		if (isHeavyTowerSelected == true && isLightTowerSelected != true && isFastTowerSelected != true) {
 			if (isMouseInGame == true) {
 				g.drawImage(heavyTower, (mouseX - (heavyTower.getWidth() / 2)), (mouseY - (heavyTower.getHeight() / 2)),
@@ -359,8 +361,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if(isHeavyTowerPlaced){
 			HeavyTower newHeavyTower = createHeavyTower(mousePlacedX, mousePlacedY);
-			g.drawImage(fastTower, newHeavyTower.getxPos(), newHeavyTower.getyPos(),
+			g.drawImage(heavyTower, newHeavyTower.getxPos(), newHeavyTower.getyPos(),
 					this);
+			isHeavyTowerPlaced = false;
+			mousePlacedX = 0;
+			mousePlacedX = 0;
 
 		}
 		
@@ -375,8 +380,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if(isLightTowerPlaced){
 			LightTower newLightTower = createNewLightTower(mousePlacedX, mousePlacedY);
-			g.drawImage(fastTower, newLightTower.getxPos(), newLightTower.getyPos(),
+			g.drawImage(lightTower, newLightTower.getxPos(), newLightTower.getyPos(),
 					this);
+			isLightTowerPlaced = false;
+			mousePlacedX = 0;
+			mousePlacedX = 0;
 		}
 		
 		
@@ -393,6 +401,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			FastTower newFastTower = createNewFastTower(mousePlacedX, mousePlacedY);
 			g.drawImage(fastTower, newFastTower.getxPos(), newFastTower.getyPos(),
 					this);
+			isFastTowerPlaced= false;
+			mousePlacedX = 0;
+			mousePlacedX = 0;
 		}
 		
 	}
