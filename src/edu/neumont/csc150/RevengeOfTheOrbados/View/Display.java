@@ -132,7 +132,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		setBounds(new java.awt.Rectangle(0, 0, 2560, 1440));
 		setPreferredSize(new java.awt.Dimension(1920, 1080));
 		setSize(new java.awt.Dimension(2560, 1440));
-
+		
+		jButton1.addMouseListener(this);
+		jButton2.addMouseListener(this);
+		jButton3.addMouseListener(this);
+		
+		jPanel1.addMouseListener(this);
+		jPanel1.addMouseMotionListener(this);
+		jPanel2.addMouseListener(this);
+		jPanel2.addMouseMotionListener(this);
+		
 		jPanel1.setBackground(new java.awt.Color(0, 0, 204));
 		jPanel1.addMouseMotionListener(this);
 		jPanel2.addMouseMotionListener(this);
@@ -309,7 +318,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		g.drawString(isMouseInGameString, jPanel1.getWidth() - 350, jPanel1.getHeight() - 100);
 		if (isLightTowerSelected == true) {
 			if (isMouseInGame == true) {
-				g.drawImage(lightTower, mouseX, mouseY, this);
+				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)),
+						(mouseY - (lightTower.getHeight() / 2)),
+						this);
 			}
 		}
 		try {
