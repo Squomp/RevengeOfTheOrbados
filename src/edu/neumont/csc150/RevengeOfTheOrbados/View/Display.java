@@ -32,6 +32,9 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import edu.neumont.csc150.RevengeOfTheOrbados.Controller.GameManager;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.FastTower;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.HeavyTower;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.LightTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 
 public class Display extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
@@ -69,7 +72,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	private javax.swing.JFrame window;
 	private BufferedImage levelBackground;
-	private boolean lightTowerClicked = false;
+	
+
+
 
 	/**
 	 * create new Display instance
@@ -342,22 +347,78 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (isMouseInGame == true) {
 				g.drawImage(heavyTower, (mouseX - (heavyTower.getWidth() / 2)), (mouseY - (heavyTower.getHeight() / 2)),
 						this);
-				
-
 			}
 		}
+		
 		if (isHeavyTowerClicked == true) {
 			g.drawImage(heavyTower, (mouseClickedX - (heavyTower.getWidth() / 2)),
 					(mouseClickedY - (heavyTower.getHeight() / 2)), this);
+			mousePlacedX = (mouseClickedX - (heavyTower.getWidth() / 2));
+			mousePlacedY = (mouseClickedY - (heavyTower.getHeight() / 2));
+			isHeavyTowerPlaced = true;
 		}
+		if(isHeavyTowerPlaced){
+			HeavyTower newHeavyTower = createHeavyTower(mousePlacedX, mousePlacedY);
+			g.drawImage(fastTower, newHeavyTower.getxPos(), newHeavyTower.getyPos(),
+					this);
+
+		}
+		
+		
+		
 		if (isLightTowerClicked == true) {
 			g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
 					(mouseClickedY - (lightTower.getHeight() / 2)), this);
+			mousePlacedX = (mouseClickedX - (lightTower.getWidth() / 2));
+			mousePlacedY = (mouseClickedY - (lightTower.getHeight() / 2));
+			isLightTowerPlaced =true;
 		}
+		if(isLightTowerPlaced){
+			LightTower newLightTower = createNewLightTower(mousePlacedX, mousePlacedY);
+			g.drawImage(fastTower, newLightTower.getxPos(), newLightTower.getyPos(),
+					this);
+		}
+		
+		
 		if (isFastTowerClicked == true) {
 			g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
 					(mouseClickedY - (fastTower.getHeight() / 2)), this);
+			mousePlacedX = (mouseClickedX - (fastTower.getWidth() / 2));
+			mousePlacedY = (mouseClickedY - (fastTower.getHeight() / 2));
+			isFastTowerPlaced = true;
 		}
+		
+		
+		if(isFastTowerPlaced){
+			FastTower newFastTower = createNewFastTower(mousePlacedX, mousePlacedY);
+			g.drawImage(fastTower, newFastTower.getxPos(), newFastTower.getyPos(),
+					this);
+		}
+		
+	}
+
+	private HeavyTower createHeavyTower(int x, int y) {
+		HeavyTower HeavyTowerPlaced = new HeavyTower();
+		HeavyTowerPlaced.setxPos(x);
+		HeavyTowerPlaced.setyPos(y);
+		return HeavyTowerPlaced;
+	}
+
+	private LightTower createNewLightTower(int x, int y) {
+		LightTower LightTowerPlaced = new LightTower();
+		LightTowerPlaced.setxPos(x);
+		LightTowerPlaced.setyPos(y);
+		return LightTowerPlaced;
+	}
+
+	private FastTower createNewFastTower(int x,int y) {
+		FastTower fastTowerPlaced = new FastTower();
+		fastTowerPlaced.setxPos(x);
+		fastTowerPlaced.setyPos(y);
+		return fastTowerPlaced;
+//		if(isFastTowerPlaced){
+//			repaint();
+//		}
 	}
 
 	@Override
