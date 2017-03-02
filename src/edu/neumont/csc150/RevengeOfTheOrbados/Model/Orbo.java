@@ -1,8 +1,11 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.Model;
 
+import java.awt.Color;
+
 public class Orbo {
 
 	private int level, speed, dmg, moneyPerKill, xPos, yPos, width = 70, height = 65;
+	private Color color;
 	
 	/**
 	 * 
@@ -116,6 +119,22 @@ public class Orbo {
 	 */
 	public int getHeight() {
 		return height;
+	}
+	
+	
+
+	/**
+	 * @return the color
+	 */
+	public Color getColor() {
+		return color;
+	}
+
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	/**

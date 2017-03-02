@@ -1,5 +1,6 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.Controller;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import java.util.Random;
@@ -67,16 +68,7 @@ public class GameManager {
 		}
 	}
 
-	public Tower towerBuy(int whichTower) {
-
-		return null;
-	}
-
 	public void towerSell(Tower tower) {
-
-	}
-
-	public void newGame() {
 
 	}
 
@@ -86,15 +78,23 @@ public class GameManager {
 	 * @param level
 	 * @return the orbo
 	 */
-	public Orbo newOrbo(int level) {
-		Orbo o = new Orbo(level, 1, 5, 30);
+	public Orbo newOrbo() {
+		Orbo o = new Orbo(0, 1, 5, 30);
 		o.setxPos(25);
 		o.setyPos(615);
+		int x = r.nextInt(3);
+		if(x == 0){
+			o.setColor(Color.green);
+			o.setLevel(2);
+		}
+		else if(x == 1){
+			o.setColor(Color.BLUE);
+			o.setLevel(4);
+		}
+		else if(x == 2){
+			o.setColor(Color.RED);
+			o.setLevel(6);
+		}
 		return o;
 	}
-
-	public void gameOver() {
-
-	}
-
 }

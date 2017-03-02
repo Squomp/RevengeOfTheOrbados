@@ -45,7 +45,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private BufferedImage lightTower, heavyTower, fastTower;
 	private ArrayList<Orbo> orbos = new ArrayList<>();
 	private Random r = new Random();
-	private boolean possibleLevelValue;
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, isLightTowerClicked = false;
 	private boolean isMouseInGame = false;
@@ -68,12 +67,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
-	private javax.swing.JProgressBar jProgressBar1;
-
 	private javax.swing.JFrame window;
+	
 	private BufferedImage levelBackground;
 	
-
+	private int buyTimeCounter = 0;
 
 
 	/**
@@ -117,7 +115,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jPanel2 = new javax.swing.JPanel();
 		jLabel1 = new javax.swing.JLabel();
 		jLabel2 = new javax.swing.JLabel();
-		jProgressBar1 = new javax.swing.JProgressBar();
 		jButton1 = new javax.swing.JButton();
 		jButton2 = new javax.swing.JButton();
 		jButton3 = new javax.swing.JButton();
@@ -137,13 +134,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		setSize(new java.awt.Dimension(2560, 1440));
 
 		jPanel1.setBackground(new java.awt.Color(0, 0, 204));
-		jButton2.addMouseListener(this);
-		jButton1.addMouseListener(this);
-		jButton3.addMouseListener(this);
-		window.addMouseListener(this);
-		window.addMouseListener(this);
 		jPanel1.addMouseMotionListener(this);
-		jPanel1.addMouseListener(this);
 		jPanel2.addMouseMotionListener(this);
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
@@ -155,19 +146,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				.addGap(500, 1710, Short.MAX_VALUE));
 
 		jLabel1.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
-		jLabel1.setText("Round Progress");
 
 		jLabel2.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
 		jLabel2.setText("Current Round: ");
-
-		jProgressBar1.setBackground(new java.awt.Color(102, 255, 102));
-		jProgressBar1.setForeground(new java.awt.Color(102, 255, 102));
-
-		jButton1.setIcon(new javax.swing.ImageIcon("images/FastTowerBTN.png")); // NOI18N
-
-		jButton2.setIcon(new javax.swing.ImageIcon("images/LightTowerBTN.png")); // NOI18N
-
-		jButton3.setIcon(new javax.swing.ImageIcon("images/HeavyTowerBTN.png")); // NOI18N
 
 		jButton1.setIcon(new javax.swing.ImageIcon("images\\FastTowerBTN.png")); // NOI18N
 
@@ -203,9 +184,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 										.addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel2)
 												.addGap(133, 133, 133).addComponent(jLabel3))
 										.addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel1)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-												.addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE,
-														220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
 								.addGap(125, 125, 125))
 						.addGroup(jPanel2Layout.createSequentialGroup().addGap(25, 25, 25)
 								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,8 +201,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 								.addComponent(jLabel2).addComponent(jLabel3))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-								.addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addGap(25, 25, 25)
@@ -244,8 +221,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		jLabel1.getAccessibleContext().setAccessibleName("roundProgressLBL");
 		jLabel2.getAccessibleContext().setAccessibleName("currentRoundLBL");
-		jProgressBar1.getAccessibleContext().setAccessibleName("roundProgressBAR");
-		jProgressBar1.getAccessibleContext().setAccessibleDescription("");
 		jButton1.getAccessibleContext().setAccessibleName("fastTowerBTN");
 		jButton2.getAccessibleContext().setAccessibleName("lightTowerBTN");
 		jButton3.getAccessibleContext().setAccessibleName("heavyTowerBTN");
@@ -277,7 +252,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		window.getContentPane().add(jPanel1);
 		window.pack();
 		window.setVisible(true);
-
+		
+		//startRound();
 		orboSpawnTimer = new Timer(1000, this);
 		orboSpawnTimer.start();
 
@@ -320,24 +296,28 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void paint(Graphics g) {
-
 		super.paint(g);
 		// square width = 90 height = 74
 		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), 1800, 1258, this);
 		for (Orbo orbo : orbos) {
-			g.setColor(Color.GREEN);
+			g.setColor(orbo.getColor());
 			g.fillOval(orbo.getxPos(), orbo.getyPos(), orbo.getWidth(), orbo.getHeight());
 		}
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 24));
+		g.setColor(Color.YELLOW);
 		g.drawString("Tower Health: " + towerHealth, jPanel1.getWidth() - 300, jPanel1.getHeight() - 100);
 		g.drawString(isMouseInGameString, jPanel1.getWidth() - 350, jPanel1.getHeight() - 100);
-		if (isLightTowerSelected == true && isFastTowerSelected != true && isHeavyTowerSelected != true) {
+		if (isLightTowerSelected == true) {
 			if (isMouseInGame == true) {
-				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)), (mouseY - (lightTower.getHeight() / 2)),
-						this);
+				g.drawImage(lightTower, mouseX, mouseY, this);
 			}
 		}
-		
+		try {
+			checkForLoss();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
@@ -407,7 +387,36 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		
 	}
+	
+	/**
+	 * method that checks if the Tower has lost all health and prompts user with endgame menu
+	 * @throws IOException
+	 */
+	public void checkForLoss() throws IOException {
+		if(towerHealth == 0){
+			orbos.clear();
+			orboSpawnTimer.stop();
+			orboMoveTimer.stop();
+			Object options[] = { "Play Again", "Exit" };
+			int choice = JOptionPane.showOptionDialog(window, "Would you like to try again?", "Game Over", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			if (choice == JOptionPane.CLOSED_OPTION || choice == 1) {
+				System.exit(1);
+			}
+			else if (choice == 0){
+				window.setVisible(false);
+				GameManager newGame = new GameManager();
+				newGame.run();
+			}
+		}
+	}
 
+	/**
+	 * creates new place-able heavy tower
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private HeavyTower createHeavyTower(int x, int y) {
 		HeavyTower HeavyTowerPlaced = new HeavyTower();
 		HeavyTowerPlaced.setxPos(x);
@@ -415,6 +424,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		return HeavyTowerPlaced;
 	}
 
+	/**
+	 * creates new palce-able light tower
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private LightTower createNewLightTower(int x, int y) {
 		LightTower LightTowerPlaced = new LightTower();
 		LightTowerPlaced.setxPos(x);
@@ -422,6 +437,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		return LightTowerPlaced;
 	}
 
+	/**
+	 * creates new place-able fast tower
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private FastTower createNewFastTower(int x,int y) {
 		FastTower fastTowerPlaced = new FastTower();
 		fastTowerPlaced.setxPos(x);
@@ -434,16 +455,22 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int orboSpeed = 4;
-		if (e.getSource() == this.orboSpawnTimer) {
-			while (!possibleLevelValue) {
-				int x = r.nextInt(6) + 2;
-				if (x == 2 || x == 4 || x == 6) {
-					possibleLevelValue = true;
-				}
-			}
-			orbos.add(game.newOrbo(x));
+		/*if (e.getSource() == this.buyTimer){
+		buyTimeCounter++;
+		
+		if (buyTimeCounter == 30) {
+			buyTimer.stop();
+			orboSpawnTimer = new Timer(2000, this);
+			orboSpawnTimer.start();
+
+			orboMoveTimer = new Timer(1, this);
+			orboMoveTimer.start();
 		}
+	}*/
+	if (e.getSource() == this.orboSpawnTimer) {
+		orbos.add(game.newOrbo());
+	}
+	int orboSpeed = 4;
 		if (e.getSource() == this.orboMoveTimer) {
 			for (int i = 0; i < orbos.size(); i++) {
 				if (orbos.get(i).getxPos() > 24 && orbos.get(i).getxPos() < 205 && orbos.get(i).getyPos() > 614
