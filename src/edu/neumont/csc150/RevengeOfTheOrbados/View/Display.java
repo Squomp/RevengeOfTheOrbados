@@ -521,7 +521,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		this.repaint();
 	}
 
-	/** change for commit*/
+	// change for push
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource().equals(jButton2)) {
