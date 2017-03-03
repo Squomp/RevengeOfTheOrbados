@@ -3,7 +3,6 @@ package edu.neumont.csc150.RevengeOfTheOrbados.View;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -13,10 +12,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowEvent;
-
-import javax.swing.ImageIcon;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +19,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -50,6 +43,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
+	private int roundNumber = 0;
 
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
 	Point yLocation = MouseInfo.getPointerInfo().getLocation();
@@ -306,6 +300,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
+		String roundNumberString = Integer.toString(roundNumber);
 		// square width = 90 height = 74
 		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), 1800, 1258, this);
 		for (Orbo orbo : orbos) {
@@ -316,6 +311,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		g.setColor(Color.YELLOW);
 		g.drawString("Tower Health: " + towerHealth, jPanel1.getWidth() - 300, jPanel1.getHeight() - 100);
 		g.drawString(isMouseInGameString, jPanel1.getWidth() - 350, jPanel1.getHeight() - 100);
+		String buyTimeCounterString = Integer.toString(buyTimeCounter);
+		g.drawString("Buy Time: " + buyTimeCounterString, jPanel1.getWidth() - 300, 1250);
+		jLabel2.setText("Round Number: " + roundNumberString);
 		if (isLightTowerSelected == true) {
 			if (isMouseInGame == true) {
 				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)),
@@ -331,6 +329,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
+				
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
 						this);
 			}
@@ -396,6 +395,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = 0;
 			mousePlacedX = 0;
 		}
+		
+		
 		
 	}
 	
@@ -618,6 +619,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mouseY = e.getY();
 		}
 	}
+//	public boolean checkTowerPos(Object other){
+//		
+//	}
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
