@@ -29,6 +29,7 @@ import edu.neumont.csc150.RevengeOfTheOrbados.Model.FastTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.HeavyTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.LightTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.Tower;
 
 public class Display extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
@@ -36,7 +37,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private boolean pause = false;
 	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
 	private BufferedImage lightTower, heavyTower, fastTower;
-	private ArrayList<Orbo> orbos = new ArrayList<>();
+	private ArrayList<Orbo> orbados = new ArrayList<>();
+	private ArrayList<Tower> towersPlaced = new ArrayList<>();
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, isLightTowerClicked = false;
@@ -66,7 +68,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private BufferedImage levelBackground;
 	
 	private int buyTimeCounter = 0;
+	private int orboSpawnCounter = 0;
 
+	private int numOfOrbados = 20;
 
 	/**
 	 * create new Display instance
@@ -256,12 +260,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		window.pack();
 		window.setVisible(true);
 		
-		//startRound();
-		orboSpawnTimer = new Timer(1000, this);
-		orboSpawnTimer.start();
-
-		orboMoveTimer = new Timer(1, this);
-		orboMoveTimer.start();
+		buyTimer = new Timer(1000, this);
+		startRound();
 	}// </editor-fold>
 
 	/**
@@ -303,7 +303,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		String roundNumberString = Integer.toString(roundNumber);
 		// square width = 90 height = 74
 		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), 1800, 1258, this);
-		for (Orbo orbo : orbos) {
+		for (Orbo orbo : orbados) {
 			g.setColor(orbo.getColor());
 			g.fillOval(orbo.getxPos(), orbo.getyPos(), orbo.getWidth(), orbo.getHeight());
 		}
@@ -321,15 +321,20 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 						this);
 			}
 		}
+		
+		if(orbados.isEmpty()){
+			startRound();
+		}
+		
 		try {
 			checkForLoss();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
-				
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
 						this);
 			}
@@ -341,7 +346,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 						this);
 			}
 		}
-		
 		if (isHeavyTowerClicked == true) {
 			g.drawImage(heavyTower, (mouseClickedX - (heavyTower.getWidth() / 2)),
 					(mouseClickedY - (heavyTower.getHeight() / 2)), this);
@@ -350,17 +354,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			isHeavyTowerPlaced = true;
 		}
 		if(isHeavyTowerPlaced){
-			HeavyTower newHeavyTower = createHeavyTower(mousePlacedX, mousePlacedY);
-			g.drawImage(heavyTower, newHeavyTower.getxPos(), newHeavyTower.getyPos(),
-					this);
+			towersPlaced.add(createHeavyTower(mousePlacedX, mousePlacedY));
 			isHeavyTowerPlaced = false;
 			mousePlacedX = 0;
 			mousePlacedX = 0;
 
 		}
-		
-		
-		
 		if (isLightTowerClicked == true) {
 			g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
 					(mouseClickedY - (lightTower.getHeight() / 2)), this);
@@ -369,15 +368,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			isLightTowerPlaced =true;
 		}
 		if(isLightTowerPlaced){
-			LightTower newLightTower = createNewLightTower(mousePlacedX, mousePlacedY);
-			g.drawImage(lightTower, newLightTower.getxPos(), newLightTower.getyPos(),
-					this);
+			towersPlaced.add(createNewLightTower(mousePlacedX, mousePlacedY));
 			isLightTowerPlaced = false;
 			mousePlacedX = 0;
 			mousePlacedX = 0;
 		}
-		
-		
 		if (isFastTowerClicked == true) {
 			g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
 					(mouseClickedY - (fastTower.getHeight() / 2)), this);
@@ -385,19 +380,24 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedY = (mouseClickedY - (fastTower.getHeight() / 2));
 			isFastTowerPlaced = true;
 		}
-		
-		
 		if(isFastTowerPlaced){
-			FastTower newFastTower = createNewFastTower(mousePlacedX, mousePlacedY);
-			g.drawImage(fastTower, newFastTower.getxPos(), newFastTower.getyPos(),
-					this);
+			towersPlaced.add(createNewFastTower(mousePlacedX, mousePlacedY));
 			isFastTowerPlaced= false;
 			mousePlacedX = 0;
 			mousePlacedX = 0;
 		}
 		
-		
-		
+		for (Tower tower : towersPlaced) {
+			if(tower instanceof HeavyTower){
+				g.drawImage(heavyTower, tower.getxPos(), tower.getyPos(), this);
+			}
+			if(tower instanceof LightTower){
+				g.drawImage(lightTower, tower.getxPos(), tower.getyPos(), this);
+			}
+			if(tower instanceof FastTower){
+				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
+			}
+		}
 	}
 	
 	/**
@@ -406,7 +406,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	 */
 	public void checkForLoss() throws IOException {
 		if(towerHealth == 0){
-			orbos.clear();
+			orbados.clear();
 			orboSpawnTimer.stop();
 			orboMoveTimer.stop();
 			Object options[] = { "Play Again", "Exit" };
@@ -421,6 +421,13 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				newGame.run();
 			}
 		}
+	}
+	
+	/**
+	 * Starts the buyTimer
+	 */
+	public void startRound(){
+		buyTimer.start();
 	}
 
 	/**
@@ -467,65 +474,79 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		/*if (e.getSource() == this.buyTimer){
-		buyTimeCounter++;
-		
-		if (buyTimeCounter == 30) {
-			buyTimer.stop();
-			orboSpawnTimer = new Timer(2000, this);
-			orboSpawnTimer.start();
+		if (e.getSource() == this.buyTimer){
+			buyTimeCounter++;
+			
+			if (buyTimeCounter == 30) {
+				buyTimer.stop();
+				orboSpawnTimer = new Timer(1000, this);
+				orboSpawnTimer.start();
 
-			orboMoveTimer = new Timer(1, this);
-			orboMoveTimer.start();
+				orboMoveTimer = new Timer(1, this);
+				orboMoveTimer.start();
+			}
 		}
-	}*/
+		if (e.getSource() == this.orboSpawnTimer) {
+			orboSpawnCounter++;
+			orbados.add(game.newOrbo());
+			if(orboSpawnCounter == numOfOrbados){
+				this.orboSpawnTimer.stop();
+				this.buyTimer.start();
+				buyTimeCounter = 0;
+				numOfOrbados += 10;
+				System.out.println(buyTimeCounter + " " + numOfOrbados);
+				if(orboSpawnTimer.getDelay() > 300){
+					orboSpawnTimer.setDelay(orboSpawnTimer.getDelay() - 100);
+				}
+			}
+		}
 	if (e.getSource() == this.orboSpawnTimer) {
-		orbos.add(game.newOrbo());
+		orbados.add(game.newOrbo());
 	}
 	int orboSpeed = 4;
 		if (e.getSource() == this.orboMoveTimer) {
-			for (int i = 0; i < orbos.size(); i++) {
-				if (orbos.get(i).getxPos() > 24 && orbos.get(i).getxPos() < 205 && orbos.get(i).getyPos() > 614
-						&& orbos.get(i).getyPos() < 690) {
-					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 205 && orbos.get(i).getxPos() <= 215
-						&& orbos.get(i).getyPos() > 102 && orbos.get(i).getyPos() < 690) {
-					orbos.get(i).setyPos(orbos.get(i).getyPos() - orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 205 && orbos.get(i).getxPos() < 480
-						&& orbos.get(i).getyPos() < 180) {
-					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 480 && orbos.get(i).getxPos() < 490
-						&& orbos.get(i).getyPos() < 833) {
-					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() > 120 && orbos.get(i).getxPos() < 490 && orbos.get(i).getyPos() < 840
-						&& orbos.get(i).getyPos() > 830) {
-					orbos.get(i).setxPos(orbos.get(i).getxPos() - orboSpeed);
-				} else if (orbos.get(i).getxPos() > 100 && orbos.get(i).getxPos() < 205
-						&& orbos.get(i).getyPos() < 1128) {
-					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() < 745 && orbos.get(i).getyPos() > 1128) {
-					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 745 && orbos.get(i).getxPos() < 755
-						&& orbos.get(i).getyPos() > 97) {
-					orbos.get(i).setyPos(orbos.get(i).getyPos() - orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 745 && orbos.get(i).getxPos() < 1020) {
-					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() > 1020 && orbos.get(i).getxPos() < 1030
-						&& orbos.get(i).getyPos() < 1128) {
-					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() > 1020 && orbos.get(i).getxPos() < 1285) {
-					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 1285 && orbos.get(i).getxPos() < 1290
-						&& orbos.get(i).getyPos() > 100) {
-					orbos.get(i).setyPos(orbos.get(i).getyPos() - orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 1285 && orbos.get(i).getxPos() <= 1555) {
-					orbos.get(i).setxPos(orbos.get(i).getxPos() + orboSpeed);
-				} else if (orbos.get(i).getxPos() >= 1555 && orbos.get(i).getyPos() < 1000) {
-					orbos.get(i).setyPos(orbos.get(i).getyPos() + orboSpeed);
+			for (int i = 0; i < orbados.size(); i++) {
+				if (orbados.get(i).getxPos() > 24 && orbados.get(i).getxPos() < 205 && orbados.get(i).getyPos() > 614
+						&& orbados.get(i).getyPos() < 690) {
+					orbados.get(i).setxPos(orbados.get(i).getxPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 205 && orbados.get(i).getxPos() <= 215
+						&& orbados.get(i).getyPos() > 102 && orbados.get(i).getyPos() < 690) {
+					orbados.get(i).setyPos(orbados.get(i).getyPos() - orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 205 && orbados.get(i).getxPos() < 480
+						&& orbados.get(i).getyPos() < 180) {
+					orbados.get(i).setxPos(orbados.get(i).getxPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 480 && orbados.get(i).getxPos() < 490
+						&& orbados.get(i).getyPos() < 833) {
+					orbados.get(i).setyPos(orbados.get(i).getyPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() > 120 && orbados.get(i).getxPos() < 490 && orbados.get(i).getyPos() < 840
+						&& orbados.get(i).getyPos() > 830) {
+					orbados.get(i).setxPos(orbados.get(i).getxPos() - orboSpeed);
+				} else if (orbados.get(i).getxPos() > 100 && orbados.get(i).getxPos() < 205
+						&& orbados.get(i).getyPos() < 1128) {
+					orbados.get(i).setyPos(orbados.get(i).getyPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() < 745 && orbados.get(i).getyPos() > 1128) {
+					orbados.get(i).setxPos(orbados.get(i).getxPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 745 && orbados.get(i).getxPos() < 755
+						&& orbados.get(i).getyPos() > 97) {
+					orbados.get(i).setyPos(orbados.get(i).getyPos() - orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 745 && orbados.get(i).getxPos() < 1020) {
+					orbados.get(i).setxPos(orbados.get(i).getxPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() > 1020 && orbados.get(i).getxPos() < 1030
+						&& orbados.get(i).getyPos() < 1128) {
+					orbados.get(i).setyPos(orbados.get(i).getyPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() > 1020 && orbados.get(i).getxPos() < 1285) {
+					orbados.get(i).setxPos(orbados.get(i).getxPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 1285 && orbados.get(i).getxPos() < 1290
+						&& orbados.get(i).getyPos() > 100) {
+					orbados.get(i).setyPos(orbados.get(i).getyPos() - orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 1285 && orbados.get(i).getxPos() <= 1555) {
+					orbados.get(i).setxPos(orbados.get(i).getxPos() + orboSpeed);
+				} else if (orbados.get(i).getxPos() >= 1555 && orbados.get(i).getyPos() < 1000) {
+					orbados.get(i).setyPos(orbados.get(i).getyPos() + orboSpeed);
 				}
 
-				if (orbos.get(i).getxPos() >= 1555 && orbos.get(i).getyPos() < 990 && orbos.get(i).getyPos() > 980) {
-					orbos.remove(i);
+				if (orbados.get(i).getxPos() >= 1555 && orbados.get(i).getyPos() < 990 && orbados.get(i).getyPos() > 980) {
+					orbados.remove(i);
 					towerHealth -= 5;
 				}
 			}

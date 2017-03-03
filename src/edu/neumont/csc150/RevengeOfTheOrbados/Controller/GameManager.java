@@ -37,20 +37,13 @@ public class GameManager {
 	}
 
 	/**
-	 * method to take helath away from orbo when hit
+	 * method to take health away from orbo when hit
 	 * 
 	 * @param orbo
 	 * @param dmgDone
 	 */
 	public void orboLoseHealth(Orbo orbo, int dmgDone) {
 		orbo.setLevel(orbo.getLevel() - dmgDone);
-	}
-
-	public void towerLoseHealth(Orbo orbo) {
-		// TO DO check where main tower is
-		if (orbo.getxPos() > 1000 && orbo.getyPos() > 1000) {
-
-		}
 	}
 
 	/**
