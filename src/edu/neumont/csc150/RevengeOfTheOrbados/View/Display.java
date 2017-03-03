@@ -29,6 +29,7 @@ import edu.neumont.csc150.RevengeOfTheOrbados.Model.FastTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.HeavyTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.LightTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.Tower;
 
 public class Display extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
@@ -619,8 +620,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mouseY = e.getY();
 		}
 	}
-//	public boolean checkTowerPos(Object other){
-//		
+//	public boolean checkTowerPos(Tower tower){
+//		int towerX = tower.getxPos();
+//		int towerY = tower.getyPos();
+//		boolean canSpawn = false;
+//		if (towerX >= 180 && towerY >= 74){
+//			if (towerX + 150 <= 360 && towerY + 150 <= 740){
+//				return true;
+//			}
+//		}
+//		if (towerX >= )
 //	}
 
 	@Override
