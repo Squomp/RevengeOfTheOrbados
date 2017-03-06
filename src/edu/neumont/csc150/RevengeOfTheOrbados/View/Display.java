@@ -335,26 +335,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-<<<<<<< HEAD
 		}*/
 		
-		if (isLightTowerSelected == true) {
-=======
-*/
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
->>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 			if (isMouseInGame == true) {
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
 						this);
 			}
 			
 		}
-<<<<<<< HEAD
 		
-		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
-=======
 		if (isLightTowerSelected == true && isHeavyTowerSelected != true && isFastTowerSelected != true) {
->>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 			if (isMouseInGame == true) {
 				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)), (mouseY - (lightTower.getHeight() / 2)),
 						this);
@@ -384,10 +375,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = 0;
 			isHeavyTowerClicked = false;
 			isHeavyTowerSelected = false;
-<<<<<<< HEAD
 			
-=======
->>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 		}
 		if (isLightTowerClicked == true) {
 			g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
@@ -404,10 +392,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = 0;
 			isLightTowerClicked = false;
 			isLightTowerSelected = false;
-<<<<<<< HEAD
 			
-=======
->>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 		}
 		if (isFastTowerClicked == true) {
 			g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
@@ -424,10 +409,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = 0;
 			isFastTowerClicked = false;
 			isFastTowerSelected = false;
-<<<<<<< HEAD
 			
-=======
->>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 		}
 
 		for (Tower tower : towersPlaced) {
@@ -441,16 +423,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
 		}
-<<<<<<< HEAD
 
 		//System.out.println("Run of paint took " + (endPaint - startPart) + " milliseconds");
-=======
-		
 		
 		long endPaint = System.currentTimeMillis();
-		System.out.println("Run of paint took " + (endPaint - startPart) + " milliseconds");
+		//System.out.println("Run of paint took " + (endPaint - startPart) + " milliseconds");
 		this.repaint();
->>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 	}
 	
 	/**
@@ -589,13 +567,21 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	// change for push
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		for(Tower tower: towersPlaced){
-		if(e.getX() > tower.getxPos() && e.getX() < tower.getxPos() + lightTower.getWidth()
-		&& e.getY() > tower.getyPos() 
-		&& e.getY() < tower.getyPos() + lightTower.getHeight()){
-			System.out.println("you clicked a tower");
+		Tower selectedTower = null;
+		for (Tower tower : towersPlaced) {
+			if (e.getX() > tower.getxPos() && e.getX() < tower.getxPos() + lightTower.getWidth()
+					&& e.getY() > tower.getyPos() && e.getY() < tower.getyPos() + lightTower.getHeight()) {
+				jButton4.setEnabled(true);
+				selectedTower = tower;
+			} else {
+				jButton4.setEnabled(false);
+			}
 		}
+		if(e.getSource().equals(jButton4)){
+			game.towerUpgrade(selectedTower);
 		}
+		
+		
 		if (e.getSource().equals(jButton2)) {
 			isLightTowerSelected = true;
 		}

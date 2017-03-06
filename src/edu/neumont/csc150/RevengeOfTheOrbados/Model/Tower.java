@@ -52,20 +52,6 @@ public class Tower {
 	}
 
 	/**
-	 * @return the sellPrice of the tower
-	 */
-	public int getSellPrice() {
-		return sellPrice;
-	}
-
-	/**
-	 * @param sellPrice the sellPrice to set
-	 */
-	public void setSellPrice(int sellPrice) {
-		this.sellPrice = sellPrice;
-	}
-
-	/**
 	 * @return the attackSpeed of the tower
 	 */
 	public int getAttackSpeed() {
