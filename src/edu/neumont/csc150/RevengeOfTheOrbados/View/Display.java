@@ -57,7 +57,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private javax.swing.JButton jButton2;
 	private javax.swing.JButton jButton3;
 	private javax.swing.JButton jButton4;
-	private javax.swing.JButton jButton5;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
@@ -117,7 +116,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jButton2 = new javax.swing.JButton();
 		jButton3 = new javax.swing.JButton();
 		jButton4 = new javax.swing.JButton();
-		jButton5 = new javax.swing.JButton();
 		jLabel3 = new javax.swing.JLabel();
 
 		window = new JFrame();
@@ -167,10 +165,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jButton4.setText("Upgrade Tower");
 		jButton4.setEnabled(false);
 
-		jButton5.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
-		jButton5.setText("Sell Tower");
-		jButton5.setEnabled(false);
-
 		jLabel3.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
 		jLabel3.setText("Money:");
 		jLabel3.setToolTipText(" ");
@@ -180,8 +174,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel2Layout.createSequentialGroup().addGap(200, 200, 200)
 						.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-								.addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addGap(200, 200, 200))
@@ -222,8 +214,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 						.addGap(25, 25, 25)
 						.addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 105,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(32, 32, 32).addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 105,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(25, 25, 25)));
 
 		jLabel1.getAccessibleContext().setAccessibleName("roundProgressLBL");
@@ -232,7 +222,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jButton2.getAccessibleContext().setAccessibleName("lightTowerBTN");
 		jButton3.getAccessibleContext().setAccessibleName("heavyTowerBTN");
 		jButton4.getAccessibleContext().setAccessibleName("upgradeTowerBTN");
-		jButton5.getAccessibleContext().setAccessibleName("sellTowerBTN");
 		jLabel3.getAccessibleContext().setAccessibleName("moneyLBL");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(window.getContentPane());
