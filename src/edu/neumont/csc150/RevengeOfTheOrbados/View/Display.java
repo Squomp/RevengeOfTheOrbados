@@ -291,10 +291,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	public void paint(Graphics g) {
 		
 		super.paint(g);
-		
+		long startPart = System.currentTimeMillis();
 		// square width = 90 height = 74
 		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), 1800, 1258, this);
-		long startPart = System.currentTimeMillis();
+		
 		for (Orbo orbo : orbados) {
 			g.setColor(orbo.getColor());
 			g.fillOval(orbo.getxPos(), orbo.getyPos(), orbo.getWidth(), orbo.getHeight());
@@ -307,7 +307,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		String buyTimeCounterString = Integer.toString(buyTimeCounter);
 		g.drawString("Buy Time: " + buyTimeCounterString, jPanel1.getWidth() - 300, 1250);
 		jLabel2.setText("Round Number: " + roundNumberString);
-		long endPaint = System.currentTimeMillis();
+		
 		
 		if(orbados.isEmpty() && !this.orboSpawnTimer.isRunning() && !this.buyTimer.isRunning()){
 			startRound();
@@ -335,24 +335,32 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+<<<<<<< HEAD
 		}*/
 		
 		if (isLightTowerSelected == true) {
-			if (isMouseInGame == true) {
-				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)),
-						(mouseY - (lightTower.getHeight() / 2)),
-						this);
-			}
-		}
-		
+=======
+*/
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
+>>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 			if (isMouseInGame == true) {
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
 						this);
 			}
 			
 		}
+<<<<<<< HEAD
 		
+		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
+=======
+		if (isLightTowerSelected == true && isHeavyTowerSelected != true && isFastTowerSelected != true) {
+>>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
+			if (isMouseInGame == true) {
+				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)), (mouseY - (lightTower.getHeight() / 2)),
+						this);
+			}
+			
+		}
 		if (isHeavyTowerSelected == true && isLightTowerSelected != true && isFastTowerSelected != true) {
 			if (isMouseInGame == true) {
 				g.drawImage(heavyTower, (mouseX - (heavyTower.getWidth() / 2)), (mouseY - (heavyTower.getHeight() / 2)),
@@ -367,6 +375,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedY = (mouseClickedY - (heavyTower.getHeight() / 2));
 			isHeavyTowerPlaced = true;
 			
+			
 		}
 		if(isHeavyTowerPlaced){
 			towersPlaced.add(createHeavyTower(mousePlacedX, mousePlacedY));
@@ -375,7 +384,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = 0;
 			isHeavyTowerClicked = false;
 			isHeavyTowerSelected = false;
+<<<<<<< HEAD
 			
+=======
+>>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 		}
 		if (isLightTowerClicked == true) {
 			g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
@@ -392,7 +404,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = 0;
 			isLightTowerClicked = false;
 			isLightTowerSelected = false;
+<<<<<<< HEAD
 			
+=======
+>>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 		}
 		if (isFastTowerClicked == true) {
 			g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
@@ -409,7 +424,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = 0;
 			isFastTowerClicked = false;
 			isFastTowerSelected = false;
+<<<<<<< HEAD
 			
+=======
+>>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 		}
 
 		for (Tower tower : towersPlaced) {
@@ -423,8 +441,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
 		}
+<<<<<<< HEAD
 
 		//System.out.println("Run of paint took " + (endPaint - startPart) + " milliseconds");
+=======
+		
+		
+		long endPaint = System.currentTimeMillis();
+		System.out.println("Run of paint took " + (endPaint - startPart) + " milliseconds");
+		this.repaint();
+>>>>>>> 61a42d8907675f5a02bcc841d6907bb6274339fb
 	}
 	
 	/**
