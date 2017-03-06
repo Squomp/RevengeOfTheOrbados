@@ -289,14 +289,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void paint(Graphics g) {
+		
 		super.paint(g);
-		String roundNumberString = Integer.toString(roundNumber);
+		
 		// square width = 90 height = 74
 		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), 1800, 1258, this);
+		long startPart = System.currentTimeMillis();
 		for (Orbo orbo : orbados) {
 			g.setColor(orbo.getColor());
 			g.fillOval(orbo.getxPos(), orbo.getyPos(), orbo.getWidth(), orbo.getHeight());
 		}
+		String roundNumberString = Integer.toString(roundNumber);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 24));
 		g.setColor(Color.YELLOW);
 		g.drawString("Tower Health: " + towerHealth, jPanel1.getWidth() - 300, jPanel1.getHeight() - 100);
@@ -304,13 +307,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		String buyTimeCounterString = Integer.toString(buyTimeCounter);
 		g.drawString("Buy Time: " + buyTimeCounterString, jPanel1.getWidth() - 300, 1250);
 		jLabel2.setText("Round Number: " + roundNumberString);
-		if (isLightTowerSelected == true) {
-			if (isMouseInGame == true) {
-				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)),
-						(mouseY - (lightTower.getHeight() / 2)),
-						this);
-			}
-		}
+		long endPaint = System.currentTimeMillis();
 		
 		if(orbados.isEmpty() && !this.orboSpawnTimer.isRunning() && !this.buyTimer.isRunning()){
 			startRound();
@@ -338,13 +335,24 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+<<<<<<< HEAD
+		}
+		
+		if (isLightTowerSelected == true) {
+			if (isMouseInGame == true) {
+				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)),
+						(mouseY - (lightTower.getHeight() / 2)),
+						this);
+			}
+		}
+=======
 		}*/
-
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
 						this);
 			}
+			
 		}
 		
 		if (isHeavyTowerSelected == true && isLightTowerSelected != true && isFastTowerSelected != true) {
@@ -352,6 +360,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				g.drawImage(heavyTower, (mouseX - (heavyTower.getWidth() / 2)), (mouseY - (heavyTower.getHeight() / 2)),
 						this);
 			}
+			
 		}
 		if (isHeavyTowerClicked == true) {
 			g.drawImage(heavyTower, (mouseClickedX - (heavyTower.getWidth() / 2)),
@@ -359,13 +368,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = (mouseClickedX - (heavyTower.getWidth() / 2));
 			mousePlacedY = (mouseClickedY - (heavyTower.getHeight() / 2));
 			isHeavyTowerPlaced = true;
+			
 		}
 		if(isHeavyTowerPlaced){
 			towersPlaced.add(createHeavyTower(mousePlacedX, mousePlacedY));
 			isHeavyTowerPlaced = false;
 			mousePlacedX = 0;
 			mousePlacedX = 0;
-
+			
 		}
 		if (isLightTowerClicked == true) {
 			g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
@@ -373,12 +383,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = (mouseClickedX - (lightTower.getWidth() / 2));
 			mousePlacedY = (mouseClickedY - (lightTower.getHeight() / 2));
 			isLightTowerPlaced =true;
+			
 		}
 		if(isLightTowerPlaced){
 			towersPlaced.add(createNewLightTower(mousePlacedX, mousePlacedY));
 			isLightTowerPlaced = false;
 			mousePlacedX = 0;
 			mousePlacedX = 0;
+			
 		}
 		if (isFastTowerClicked == true) {
 			g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
@@ -386,12 +398,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mousePlacedX = (mouseClickedX - (fastTower.getWidth() / 2));
 			mousePlacedY = (mouseClickedY - (fastTower.getHeight() / 2));
 			isFastTowerPlaced = true;
+			
 		}
 		if(isFastTowerPlaced){
 			towersPlaced.add(createNewFastTower(mousePlacedX, mousePlacedY));
 			isFastTowerPlaced= false;
 			mousePlacedX = 0;
 			mousePlacedX = 0;
+			
 		}
 		
 		for (Tower tower : towersPlaced) {
@@ -404,7 +418,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if(tower instanceof FastTower){
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
+			
 		}
+		
+		
+		
+		System.out.println("Run of paint took " + (endPaint - startPart) + " milliseconds");
 	}
 	
 	/**
@@ -626,8 +645,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			mouseY = e.getY();
 		}
 	}
-//	public boolean checkTowerPos(Object other){
-//		
+//	public boolean checkTowerPos(Tower tower){
+//		int towerX = tower.getxPos();
+//		int towerY = tower.getyPos();
+//		boolean canSpawn = false;
+//		if (towerX >= 180 && towerY >= 74){
+//			if (towerX + 150 <= 360 && towerY + 150 <= 740){
+//				return true;
+//			}
+//		}
+//		if (towerX >= )
 //	}
 
 	@Override
@@ -643,7 +670,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	public void mouseEntered(MouseEvent e) {
 		if (e.getSource().equals(jPanel1)) {
 			isMouseInGame = true;
+			//repaint();
+
 			this.repaint();
+
 		}
 
 	}
