@@ -67,7 +67,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	
 	private BufferedImage levelBackground;
 	
-	private int buyTimeCounter = 0;
+	private int buyTimeCounter = 5;
 	private int orboSpawnCounter = 0;
 
 	private int numOfOrbados = 20;
@@ -260,8 +260,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		window.pack();
 		window.setVisible(true);
 		
-		buyTimer = new Timer(1000, this);
-		startRound();
+		this.buyTimer = new Timer(1000, this);
+		this.orboSpawnTimer = new Timer(1000, this);
+		this.orboMoveTimer = new Timer(1, this);
 	}// </editor-fold>
 
 	/**
@@ -322,16 +323,33 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 		
-		if(orbados.isEmpty()){
+		if(orbados.isEmpty() && !this.orboSpawnTimer.isRunning() && !this.buyTimer.isRunning()){
 			startRound();
 		}
 		
-		try {
+		if (buyTimeCounter == 0) {
+			orboSpawnTimer.start();
+			this.buyTimer.stop();
+			orboMoveTimer.start();
+		}
+		
+		if(orboSpawnCounter == numOfOrbados){
+			orboSpawnCounter = 0;
+			buyTimeCounter = 5;
+			this.orboSpawnTimer.stop();
+			numOfOrbados = numOfOrbados + 10;
+			if(orboSpawnTimer.getDelay() > 300){
+				orboSpawnTimer.setDelay(orboSpawnTimer.getDelay() - 100);
+			}
+		}
+		
+		
+		/*try {
 			checkForLoss();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
@@ -407,8 +425,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	public void checkForLoss() throws IOException {
 		if(towerHealth == 0){
 			orbados.clear();
-			orboSpawnTimer.stop();
-			orboMoveTimer.stop();
+			this.orboSpawnTimer.stop();
+			this.orboMoveTimer.stop();
 			Object options[] = { "Play Again", "Exit" };
 			int choice = JOptionPane.showOptionDialog(window, "Would you like to try again?", "Game Over", JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -427,7 +445,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	 * Starts the buyTimer
 	 */
 	public void startRound(){
-		buyTimer.start();
+		this.buyTimer.start();
+		roundNumber++;
 	}
 
 	/**
@@ -475,35 +494,13 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.buyTimer){
-			buyTimeCounter++;
-			
-			if (buyTimeCounter == 30) {
-				buyTimer.stop();
-				orboSpawnTimer = new Timer(1000, this);
-				orboSpawnTimer.start();
-
-				orboMoveTimer = new Timer(1, this);
-				orboMoveTimer.start();
-			}
+			buyTimeCounter--;
 		}
 		if (e.getSource() == this.orboSpawnTimer) {
 			orboSpawnCounter++;
 			orbados.add(game.newOrbo());
-			if(orboSpawnCounter == numOfOrbados){
-				this.orboSpawnTimer.stop();
-				this.buyTimer.start();
-				buyTimeCounter = 0;
-				numOfOrbados += 10;
-				System.out.println(buyTimeCounter + " " + numOfOrbados);
-				if(orboSpawnTimer.getDelay() > 300){
-					orboSpawnTimer.setDelay(orboSpawnTimer.getDelay() - 100);
-				}
-			}
 		}
-	if (e.getSource() == this.orboSpawnTimer) {
-		orbados.add(game.newOrbo());
-	}
-	int orboSpeed = 4;
+	int orboSpeed = 3;
 		if (e.getSource() == this.orboMoveTimer) {
 			for (int i = 0; i < orbados.size(); i++) {
 				if (orbados.get(i).getxPos() > 24 && orbados.get(i).getxPos() < 205 && orbados.get(i).getyPos() > 614
@@ -521,8 +518,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				} else if (orbados.get(i).getxPos() > 120 && orbados.get(i).getxPos() < 490 && orbados.get(i).getyPos() < 840
 						&& orbados.get(i).getyPos() > 830) {
 					orbados.get(i).setxPos(orbados.get(i).getxPos() - orboSpeed);
-				} else if (orbados.get(i).getxPos() > 100 && orbados.get(i).getxPos() < 205
-						&& orbados.get(i).getyPos() < 1128) {
+				} else if (orbados.get(i).getxPos() > 95 && orbados.get(i).getxPos() < 205
+						&& orbados.get(i).getyPos() < 1130) {
 					orbados.get(i).setyPos(orbados.get(i).getyPos() + orboSpeed);
 				} else if (orbados.get(i).getxPos() < 745 && orbados.get(i).getyPos() > 1128) {
 					orbados.get(i).setxPos(orbados.get(i).getxPos() + orboSpeed);
@@ -657,7 +654,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	public void mouseEntered(MouseEvent e) {
 		if (e.getSource().equals(jPanel1)) {
 			isMouseInGame = true;
-			repaint();
+			this.repaint();
 		}
 
 	}
