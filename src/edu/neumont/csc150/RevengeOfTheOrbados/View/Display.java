@@ -46,6 +46,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
 	private int roundNumber = 0;
+	private int money = 500;
+	Tower selectedTower = null;
 
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
 	Point yLocation = MouseInfo.getPointerInfo().getLocation();
@@ -132,6 +134,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jButton1.addMouseListener(this);
 		jButton2.addMouseListener(this);
 		jButton3.addMouseListener(this);
+		jButton4.addActionListener(this);
 
 		jPanel1.addMouseListener(this);
 		jPanel1.addMouseMotionListener(this);
@@ -288,7 +291,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void paint(Graphics g) {
-
 		super.paint(g);
 		long startPart = System.currentTimeMillis();
 		// square width = 90 height = 74
@@ -306,6 +308,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		String buyTimeCounterString = Integer.toString(buyTimeCounter);
 		g.drawString("Buy Time: " + buyTimeCounterString, jPanel1.getWidth() - 300, 1250);
 		jLabel2.setText("Round Number: " + roundNumberString);
+		jLabel3.setText("Money: " + money);
 
 		if (orbados.isEmpty() && !this.orboSpawnTimer.isRunning() && !this.buyTimer.isRunning()) {
 			startRound();
@@ -370,13 +373,18 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 		if (isHeavyTowerPlaced) {
-			towersPlaced.add(createHeavyTower(mousePlacedX, mousePlacedY));
-			isHeavyTowerPlaced = false;
-			mousePlacedX = 0;
-			mousePlacedX = 0;
-			isHeavyTowerClicked = false;
-			isHeavyTowerSelected = false;
-
+			Tower ht = createHeavyTower(mousePlacedX, mousePlacedY);
+			if (ht.getPrice() < money) {
+				towersPlaced.add(ht);
+				money = money - ht.getPrice();
+				mousePlacedX = 0;
+				mousePlacedX = 0;
+			} else {
+				isHeavyTowerSelected = false;
+				isHeavyTowerClicked = false;
+				isHeavyTowerPlaced = false;
+			}
+			
 		}
 		if (isLightTowerClicked == true) {
 			isLightTowerPlaced = false;
@@ -389,12 +397,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 		if (isLightTowerPlaced) {
-			towersPlaced.add(createNewLightTower(mousePlacedX, mousePlacedY));
-			isLightTowerPlaced = false;
-			mousePlacedX = 0;
-			mousePlacedX = 0;
-			isLightTowerClicked = false;
-			isLightTowerSelected = false;
+			Tower lt = createNewLightTower(mousePlacedX, mousePlacedY);
+			if (lt.getPrice() < money) {
+				towersPlaced.add(lt);
+				money = money - lt.getPrice();
+				mousePlacedX = 0;
+				mousePlacedX = 0;
+			} else {
+				isLightTowerSelected = false;
+				isLightTowerClicked = false;
+				isLightTowerPlaced = false;
+			}
 
 		}
 		if (isFastTowerClicked == true) {
@@ -413,7 +426,19 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			isFastTowerPlaced = false;
 			isFastTowerClicked = false;
 			isFastTowerSelected = false;
-
+			// if(checkTowerPos()){
+			Tower ft = createNewFastTower(mousePlacedX, mousePlacedY);
+			if (ft.getPrice() < money) {
+				towersPlaced.add(ft);
+				// }
+				money = money - ft.getPrice();
+				mousePlacedX = 0;
+				mousePlacedX = 0;
+			} else {
+				isFastTowerSelected = false;
+				isFastTowerClicked = false;
+				isFastTowerPlaced = false;
+			}
 			mousePlacedX = 0;
 			mousePlacedX = 0;
 
@@ -516,6 +541,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(jButton4)){
+			game.towerUpgrade(selectedTower);
+			money = money - selectedTower.getUpgradePrice();
+			jButton4.setEnabled(false);
+			selectedTower = null;
+		}
 		if (e.getSource() == this.buyTimer) {
 			buyTimeCounter--;
 		}
@@ -567,9 +598,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 				if (orbados.get(i).getxPos() >= 1555 && orbados.get(i).getyPos() < 990
 						&& orbados.get(i).getyPos() > 980) {
-					orbados.remove(i);
-					towerHealth -= 5;
-				}
+						orbados.remove(i);
+						towerHealth -= 5;
+					}
 			}
 		}
 		this.repaint();
@@ -578,16 +609,21 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	// change for push
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Tower selectedTower = null;
 		for (Tower tower : towersPlaced) {
 			if (e.getX() > tower.getxPos() && e.getX() < tower.getxPos() + lightTower.getWidth()
 					&& e.getY() > tower.getyPos() && e.getY() < tower.getyPos() + lightTower.getHeight()) {
-				jButton4.setEnabled(true);
 				selectedTower = tower;
+				if(selectedTower.getPrice() < money){
+					jButton4.setEnabled(true);
+				} else {
+					jButton4.setEnabled(false);
+					selectedTower = null;
+				}
 			} else {
 				jButton4.setEnabled(false);
 			}
 		}
+
 		if (e.getSource().equals(jButton4)) {
 			game.towerUpgrade(selectedTower);
 		}
