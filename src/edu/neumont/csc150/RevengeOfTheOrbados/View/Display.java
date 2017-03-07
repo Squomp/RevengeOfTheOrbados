@@ -360,12 +360,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		}
 		if (isHeavyTowerClicked == true) {
-			g.drawImage(heavyTower, (mouseClickedX - (heavyTower.getWidth() / 2)),
-					(mouseClickedY - (heavyTower.getHeight() / 2)), this);
-			mousePlacedX = (mouseClickedX - (heavyTower.getWidth() / 2));
-			mousePlacedY = (mouseClickedY - (heavyTower.getHeight() / 2));
-			isHeavyTowerPlaced = true;
-
+			isHeavyTowerPlaced = false;
+			if (checkTowerPos() == true) {
+				g.drawImage(heavyTower, (mouseClickedX - (heavyTower.getWidth() / 2)),
+						(mouseClickedY - (heavyTower.getHeight() / 2)), this);
+				mousePlacedX = (mouseClickedX - (heavyTower.getWidth() / 2));
+				mousePlacedY = (mouseClickedY - (heavyTower.getHeight() / 2));
+				isHeavyTowerPlaced = true;
+			}
 		}
 		if (isHeavyTowerPlaced) {
 			towersPlaced.add(createHeavyTower(mousePlacedX, mousePlacedY));
@@ -377,12 +379,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		}
 		if (isLightTowerClicked == true) {
-			g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
-					(mouseClickedY - (lightTower.getHeight() / 2)), this);
-			mousePlacedX = (mouseClickedX - (lightTower.getWidth() / 2));
-			mousePlacedY = (mouseClickedY - (lightTower.getHeight() / 2));
-			isLightTowerPlaced = true;
-
+			isLightTowerPlaced = false;
+			if (checkTowerPos() == true) {
+				g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
+						(mouseClickedY - (lightTower.getHeight() / 2)), this);
+				mousePlacedX = (mouseClickedX - (lightTower.getWidth() / 2));
+				mousePlacedY = (mouseClickedY - (lightTower.getHeight() / 2));
+				isLightTowerPlaced = true;
+			}
 		}
 		if (isLightTowerPlaced) {
 			towersPlaced.add(createNewLightTower(mousePlacedX, mousePlacedY));
@@ -394,23 +398,24 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		}
 		if (isFastTowerClicked == true) {
-			g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
-					(mouseClickedY - (fastTower.getHeight() / 2)), this);
-
-			mousePlacedX = (mouseClickedX - (fastTower.getWidth() / 2));
-			mousePlacedY = (mouseClickedY - (fastTower.getHeight() / 2));
-			isFastTowerPlaced = true;
+			isFastTowerPlaced = false;
+			if (checkTowerPos() == true) {
+				g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
+						(mouseClickedY - (fastTower.getHeight() / 2)), this);
+				mousePlacedX = (mouseClickedX - (fastTower.getWidth() / 2));
+				mousePlacedY = (mouseClickedY - (fastTower.getHeight() / 2));
+				isFastTowerPlaced = true;
+			}
 
 		}
 		if (isFastTowerPlaced) {
-			// if(checkTowerPos()){
 			towersPlaced.add(createNewFastTower(mousePlacedX, mousePlacedY));
-			// }
 			isFastTowerPlaced = false;
-			mousePlacedX = 0;
-			mousePlacedX = 0;
 			isFastTowerClicked = false;
 			isFastTowerSelected = false;
+
+			mousePlacedX = 0;
+			mousePlacedX = 0;
 
 		}
 
@@ -431,6 +436,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		// milliseconds");
 		this.repaint();
 	}
+
 	/**
 	 * method that checks if the Tower has lost all health and prompts user with
 	 * endgame menu
@@ -667,15 +673,45 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 	}
 
-	// public boolean checkTowerPos() {
-	// boolean canSpawn = false;
-	// if (mousePlacedX >= 180 && mousePlacedY >= 74) {
-	// if (mousePlacedX + 150 <= 360 && mousePlacedY + 150 <= 740) {
-	// canSpawn = true;
-	// }
-	// }
-	// return canSpawn;
-	// }
+	public boolean checkTowerPos() {
+		boolean canSpawn = false;
+		if (mouseClickedX >= 295 && mouseClickedY >= 162) {
+			if (mouseClickedX <= 467 && mouseClickedY <= 840) {
+				canSpawn = true;
+			}
+		}
+		if (mouseClickedX >= 100 && mouseClickedY >= 660){
+			if (mouseClickedX <= 295 && mouseClickedY <= 840){
+				canSpawn = true;
+			}
+		}
+		if (mouseClickedX >= 190 && mouseClickedY >= 930){
+			if (mouseClickedX <= 780 && mouseClickedY <= 940){
+				canSpawn = true;
+			}
+		}
+		if (mouseClickedX >= 870 && mouseClickedY >= 180){
+			if (mouseClickedX <= 1010 && mouseClickedY <= 940){
+				canSpawn = true;
+			}
+		}
+		if (mouseClickedX >= 1100 && mouseClickedY >= 90){
+			if (mouseClickedX <= 1240 && mouseClickedY <= 1310){
+				canSpawn = true;
+			}
+		}
+		if (mouseClickedX >= 1380 && mouseClickedY >= 0){
+			if (mouseClickedX <= 1450 && mouseClickedY <= 1480){
+				canSpawn = true;
+			}
+		}
+		if (mouseClickedX >= 1370 && mouseClickedY >= 140){
+			if (mouseClickedX <= 1580 && mouseClickedY <= 980){
+				canSpawn = true;
+			}
+		}
+		return canSpawn;
+	}
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
