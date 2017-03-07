@@ -46,6 +46,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
 	private int roundNumber = 0;
+	Tower selectedTower = null;
 
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
 	Point yLocation = MouseInfo.getPointerInfo().getLocation();
@@ -132,6 +133,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jButton1.addMouseListener(this);
 		jButton2.addMouseListener(this);
 		jButton3.addMouseListener(this);
+		jButton4.addActionListener(this);
 		
 		jPanel1.addMouseListener(this);
 		jPanel1.addMouseMotionListener(this);
@@ -506,6 +508,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(jButton4)){
+			game.towerUpgrade(selectedTower);
+			System.out.println(selectedTower.getDmg());
+			jButton4.setEnabled(false);
+			selectedTower = null;
+		}
 		if (e.getSource() == this.buyTimer){
 			buyTimeCounter--;
 		}
@@ -513,7 +521,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			orboSpawnCounter++;
 			orbados.add(game.newOrbo());
 		}
-	int orboSpeed = 3;
+		int orboSpeed = 3;
 		if (e.getSource() == this.orboMoveTimer) {
 			for (int i = 0; i < orbados.size(); i++) {
 				if (orbados.get(i).getxPos() > 24 && orbados.get(i).getxPos() < 205 && orbados.get(i).getyPos() > 614
@@ -567,20 +575,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	// change for push
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Tower selectedTower = null;
 		for (Tower tower : towersPlaced) {
 			if (e.getX() > tower.getxPos() && e.getX() < tower.getxPos() + lightTower.getWidth()
 					&& e.getY() > tower.getyPos() && e.getY() < tower.getyPos() + lightTower.getHeight()) {
 				jButton4.setEnabled(true);
 				selectedTower = tower;
+				System.out.println(selectedTower.toString());
 			} else {
 				jButton4.setEnabled(false);
 			}
 		}
-		if(e.getSource().equals(jButton4)){
-			game.towerUpgrade(selectedTower);
-		}
-		
 		
 		if (e.getSource().equals(jButton2)) {
 			isLightTowerSelected = true;
