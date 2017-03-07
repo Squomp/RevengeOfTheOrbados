@@ -291,7 +291,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void paint(Graphics g) {
-
 		super.paint(g);
 		long startPart = System.currentTimeMillis();
 		// square width = 90 height = 74
@@ -373,14 +372,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (isHeavyTowerPlaced) {
 			Tower ht = createHeavyTower(mousePlacedX, mousePlacedY);
-			towersPlaced.add(ht);
-			money = money - ht.getPrice();
-			isHeavyTowerPlaced = false;
-			mousePlacedX = 0;
-			mousePlacedX = 0;
-			isHeavyTowerClicked = false;
-			isHeavyTowerSelected = false;
-
+			if (ht.getPrice() < money) {
+				towersPlaced.add(ht);
+				money = money - ht.getPrice();
+				mousePlacedX = 0;
+				mousePlacedX = 0;
+			} else {
+				isHeavyTowerSelected = false;
+				isHeavyTowerClicked = false;
+				isHeavyTowerPlaced = false;
+			}
+			
 		}
 		if (isLightTowerClicked == true) {
 			g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
@@ -392,13 +394,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (isLightTowerPlaced) {
 			Tower lt = createNewLightTower(mousePlacedX, mousePlacedY);
-			towersPlaced.add(lt);
-			money = money - lt.getPrice();
-			isLightTowerPlaced = false;
-			mousePlacedX = 0;
-			mousePlacedX = 0;
-			isLightTowerClicked = false;
-			isLightTowerSelected = false;
+			if (lt.getPrice() < money) {
+				towersPlaced.add(lt);
+				money = money - lt.getPrice();
+				mousePlacedX = 0;
+				mousePlacedX = 0;
+			} else {
+				isLightTowerSelected = false;
+				isLightTowerClicked = false;
+				isLightTowerPlaced = false;
+			}
 
 		}
 		if (isFastTowerClicked == true) {
@@ -413,14 +418,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		if (isFastTowerPlaced) {
 			// if(checkTowerPos()){
 			Tower ft = createNewFastTower(mousePlacedX, mousePlacedY);
-			towersPlaced.add(ft);
-			// }
-			money = money - ft.getPrice();
-			isFastTowerPlaced = false;
-			mousePlacedX = 0;
-			mousePlacedX = 0;
-			isFastTowerClicked = false;
-			isFastTowerSelected = false;
+			if (ft.getPrice() < money) {
+				towersPlaced.add(ft);
+				// }
+				money = money - ft.getPrice();
+				mousePlacedX = 0;
+				mousePlacedX = 0;
+			} else {
+				isFastTowerSelected = false;
+				isFastTowerClicked = false;
+				isFastTowerPlaced = false;
+			}
 
 		}
 
@@ -592,8 +600,13 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		for (Tower tower : towersPlaced) {
 			if (e.getX() > tower.getxPos() && e.getX() < tower.getxPos() + lightTower.getWidth()
 					&& e.getY() > tower.getyPos() && e.getY() < tower.getyPos() + lightTower.getHeight()) {
-				jButton4.setEnabled(true);
 				selectedTower = tower;
+				if(selectedTower.getPrice() < money){
+					jButton4.setEnabled(true);
+				} else {
+					jButton4.setEnabled(false);
+					selectedTower = null;
+				}
 			} else {
 				jButton4.setEnabled(false);
 			}
