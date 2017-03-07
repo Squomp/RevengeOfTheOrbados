@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import edu.neumont.csc150.RevengeOfTheOrbados.Controller.GameManager;
+import edu.neumont.csc150.RevengeOfTheOrbados.Model.Bullets;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.FastTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.HeavyTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.LightTower;
@@ -35,13 +37,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	private GameManager game;
 	private boolean pause = false;
-	private Timer orboMoveTimer, orboSpawnTimer, buyTimer;
+	private Timer orboMoveTimer, orboSpawnTimer, buyTimer,lightTowerShooting,heavyTowerShooting,fastTowerShooting;
 	private BufferedImage lightTower, heavyTower, fastTower;
 	private ArrayList<Orbo> orbados = new ArrayList<>();
 	private ArrayList<Tower> towersPlaced = new ArrayList<>();
+	private List<Bullets> bullet = new ArrayList<>();
+	private Bullets bulletShooting = new Bullets();
+
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
-			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, isLightTowerClicked = false;
+			isLightTowerPlaced, isFastTowerPlaced, 
+			isHeavyTowerClicked, isFastTowerClicked,inRange, isLightTowerClicked = false;
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
@@ -454,6 +460,32 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (tower instanceof FastTower) {
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
+			for(Orbo orbo : orbados){
+				if (orbo.getxPos() >= tower.getxPos()+300||
+					orbo.getyPos() >= tower.getyPos()+300||
+					orbo.getxPos() <= tower.getxPos()-300 ||
+					orbo.getxPos() <= tower.getxPos()-300)
+					
+				 {
+				inRange = true;
+				if (inRange== true){
+				bullet.add(bulletShooting);
+				for(Bullets bullet :bullet){
+				FastTower fastTowerAttacking = createNewFastTower(getX(), getY());
+				this.fastTowerShooting= new Timer(fastTowerAttacking.getAttackSpeed(), this);
+				bullet.setBulletX(tower.getxPos()+40);
+				bullet.setBulletY(tower.getyPos()+40);
+				fastTowerAttacking.setAttackSpeed(300);				
+				fastTowerShooting.start();
+						System.out.println(bullet.getBulletXVelocity());
+				g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+				g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+	
+				//	if(g.drawRect(tower.getxPos(), tower.getyPos(), 30, 30);
+				}
+					}
+				 }
+			}
 
 		}
 		long endPaint = System.currentTimeMillis();
@@ -601,6 +633,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 						orbados.remove(i);
 						towerHealth -= 5;
 					}
+			}
+		}
+		if(e.getSource().equals(fastTowerShooting)){
+			System.out.println("yo");
+			
+			for(Bullets bullet : bullet){
+				bullet.setBulletX(bullet.getBulletX()+bullet.getBulletXVelocity());
+				bullet.setBulletY(bullet.getBulletY()+bullet.getBulletYVelocity());
 			}
 		}
 		this.repaint();
