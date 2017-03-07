@@ -61,10 +61,6 @@ public class GameManager {
 		}
 	}
 
-	public void towerSell(Tower tower) {
-
-	}
-
 	/**
 	 * creates a new orbo enemy
 	 * 
