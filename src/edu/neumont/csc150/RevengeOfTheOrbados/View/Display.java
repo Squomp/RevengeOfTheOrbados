@@ -47,12 +47,14 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
-			isLightTowerClicked = false;
+			isLightTowerClicked = false, orboTargeted;
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
 	private int roundNumber = 0;
 	private int money = 500;
+	private int orboLocation = 0;
+	private int dmgDone = 0;
 	Tower selectedTower = null;
 
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
@@ -381,7 +383,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (isHeavyTowerPlaced) {
 			Tower ht = createHeavyTower(mousePlacedX, mousePlacedY);
-			if (ht.getPrice() < money) {
+			if (ht.getPrice() <= money) {
 				towersPlaced.add(ht);
 				money = money - ht.getPrice();
 				mousePlacedX = 0;
@@ -389,8 +391,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			} else {
 				isHeavyTowerSelected = false;
 				isHeavyTowerClicked = false;
-				isHeavyTowerPlaced = false;
 			}
+			isHeavyTowerPlaced = false;
 
 		}
 		if (isLightTowerClicked == true) {
@@ -405,7 +407,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (isLightTowerPlaced) {
 			Tower lt = createNewLightTower(mousePlacedX, mousePlacedY);
-			if (lt.getPrice() < money) {
+			if (lt.getPrice() <= money) {
 				towersPlaced.add(lt);
 				money = money - lt.getPrice();
 				mousePlacedX = 0;
@@ -413,8 +415,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			} else {
 				isLightTowerSelected = false;
 				isLightTowerClicked = false;
-				isLightTowerPlaced = false;
 			}
+			isLightTowerPlaced = false;
 
 		}
 		if (isFastTowerClicked == true) {
@@ -429,13 +431,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		}
 		if (isFastTowerPlaced) {
-			towersPlaced.add(createNewFastTower(mousePlacedX, mousePlacedY));
-			isFastTowerPlaced = false;
-			isFastTowerClicked = false;
-			isFastTowerSelected = false;
-			// if(checkTowerPos()){
 			Tower ft = createNewFastTower(mousePlacedX, mousePlacedY);
-			if (ft.getPrice() < money) {
+			if (ft.getPrice() <= money) {
 				towersPlaced.add(ft);
 				// }
 				money = money - ft.getPrice();
@@ -444,11 +441,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			} else {
 				isFastTowerSelected = false;
 				isFastTowerClicked = false;
-				isFastTowerPlaced = false;
 			}
-			mousePlacedX = 0;
-			mousePlacedX = 0;
-
+			isFastTowerPlaced = false;
 		}
 
 		for (Tower tower : towersPlaced) {
@@ -461,53 +455,68 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (tower instanceof FastTower) {
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
-			for(Orbo orbo : orbados){
-				if (orbo.getxPos() <= (tower.getxPos()+(fastTower.getWidth()/2))+300&&
-					orbo.getyPos() <= (tower.getyPos()+(fastTower.getHeight()/2))+300&&
-					orbo.getxPos() >= (tower.getxPos()+(fastTower.getWidth()/2))-300 &&
-					orbo.getyPos() >= (tower.getyPos()+(fastTower.getHeight()/2))-300)
-					
-				 {
-					inRange = true;
-					if (inRange == true) {
-						fastTowerShooting.start();
-						int xv = 0;
 
-						for (Bullets bullet : bullet) {
-							
-							if(bullet.isJustFired() == true){
-								bullet.setBulletX(tower.getxPos() + 40);
-								bullet.setBulletY(tower.getyPos() + 40);
-								bullet.setJustFired(false);
-							}
-							if(bullet.isJustFired() == false){
-								bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
-								bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
-							}
-							if (fastTowerBulletFired) {
-								g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-								g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-								fastTowerBulletFired = false;
-							}
-								
+			if (orboTargeted = false) {
+				for (int i = 0; i < orbados.size(); i++) {
+					if (orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
+							&& orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
+							&& orbados.get(i).getxPos() >= (tower.getxPos() + (fastTower.getWidth() / 2)) - 300
+							&& orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300)
+
+					{
+						orboTargeted = true;
+						inRange = true;
+						if (inRange == true) {
+							game.orboLoseHealth(orbados.get(i), tower.getDmg());
+							fastTowerShooting.start();
+							int xv = 0;
+
+							for (Bullets bullet : bullet) {
+
+								if (bullet.isJustFired() == true) {
+									bullet.setBulletX(tower.getxPos() + 40);
+									bullet.setBulletY(tower.getyPos() + 40);
+									bullet.setJustFired(false);
+								}
+								if (bullet.isJustFired() == false) {
+									bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
+									bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
+								}
+								if (fastTowerBulletFired) {
+									g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+									g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+									fastTowerBulletFired = false;
+								}
+
 								bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
-			                    bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
-								if(orbo.getxPos() < tower.getxPos()){
-			                        xv = -5;
-			                    }
-			                    else if(orbo.getxPos() > tower.getxPos()){
-			                        xv = 5;
-			                    }
-			                    else if(orbo.getxPos() == tower.getxPos()){
-			                        xv = 0;
-			                    }
-			                    bullet.setBulletX(bullet.getBulletX() + xv);
-			                    double m = (orbo.getyPos() - tower.getyPos())/(orbo.getxPos() - tower.getxPos());
-			                    int yv = (int) (m * xv);
-			                    bullet.setBulletY(bullet.getBulletX() + yv);
-							// if(g.drawRect(tower.getxPos(), tower.getyPos(),
-							// 30, 30);
+								bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
+								if (orbados.get(i).getxPos() < tower.getxPos()) {
+									xv = -5;
+								} else if (orbados.get(i).getxPos() > tower.getxPos()) {
+									xv = 5;
+								} else if (orbados.get(i).getxPos() == tower.getxPos()) {
+									xv = 0;
+								}
+								bullet.setBulletX(bullet.getBulletX() + xv);
+								double m = (orbados.get(i).getyPos() - tower.getyPos()) / (orbados.get(i).getxPos() - tower.getxPos());
+								int yv = (int) (m * xv);
+								bullet.setBulletY(bullet.getBulletX() + yv);
+								// if(g.drawRect(tower.getxPos(),
+								// tower.getyPos(),
+								// 30, 30);
+							}
 						}
+					}
+					if (orbados.get(i).getxPos() >= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
+							|| orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
+							|| orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) - 300
+							|| orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300){
+						orboTargeted = false;
+						inRange = false;
+					} else if(orbados.get(i).getLevel() <= 0){
+						money = money + orbados.get(i).getMoneyPerKill();
+						orbados.remove(i);
+						orboTargeted = false;
 					}
 				}
 			}
@@ -663,14 +672,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		if (e.getSource().equals(fastTowerShooting)) {
 			if (inRange = true) {
 				bullet.add(bulletShooting);
+				//game.orboLoseHealth(orbados.get(orboLocation), dmgDone);
 			}
 			fastTowerBulletFired = true;
-			for (Bullets bullet : bullet) {
-				bullet.setJustFired(true);
-				bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
-				bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
-			}
-
 		}
 		this.repaint();
 	}
