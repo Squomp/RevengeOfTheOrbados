@@ -5,6 +5,7 @@ package edu.neumont.csc150.RevengeOfTheOrbados.Model;
 public class Bullets {
 
 	private int bulletX,bulletY,bulletXVelocity=5,bulletYVelocity=5;
+	private boolean justFired = false;
 
 	public Bullets() {
 	}
@@ -49,6 +50,18 @@ public class Bullets {
 	 */
 	public int getBulletYVelocity() {
 		return bulletYVelocity;
+	}
+	/**
+	 * @return the justFired
+	 */
+	public boolean isJustFired() {
+		return justFired;
+	}
+	/**
+	 * @param justFired the justFired to set
+	 */
+	public void setJustFired(boolean justFired) {
+		this.justFired = justFired;
 	}
 
 	
