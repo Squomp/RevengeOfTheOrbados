@@ -37,17 +37,17 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	private GameManager game;
 	private boolean pause = false;
-	private Timer orboMoveTimer, orboSpawnTimer, buyTimer,lightTowerShooting,heavyTowerShooting,fastTowerShooting;
+	private Timer orboMoveTimer, orboSpawnTimer, buyTimer, lightTowerShooting, heavyTowerShooting, fastTowerShooting;
 	private BufferedImage lightTower, heavyTower, fastTower;
 	private ArrayList<Orbo> orbados = new ArrayList<>();
 	private ArrayList<Tower> towersPlaced = new ArrayList<>();
 	private List<Bullets> bullet = new ArrayList<>();
 	private Bullets bulletShooting = new Bullets();
-
+	private boolean fastTowerBulletFired = false;
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
-			isLightTowerPlaced, isFastTowerPlaced, 
-			isHeavyTowerClicked, isFastTowerClicked,inRange, isLightTowerClicked = false;
+			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
+			isLightTowerClicked = false;
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
@@ -260,6 +260,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		this.buyTimer = new Timer(1000, this);
 		this.orboSpawnTimer = new Timer(1000, this);
 		this.orboMoveTimer = new Timer(1, this);
+		this.fastTowerShooting = new Timer(300, this);
 	}// </editor-fold>
 
 	/**
@@ -390,7 +391,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				isHeavyTowerClicked = false;
 				isHeavyTowerPlaced = false;
 			}
-			
+
 		}
 		if (isLightTowerClicked == true) {
 			isLightTowerPlaced = false;
@@ -460,31 +461,34 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (tower instanceof FastTower) {
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
-			for(Orbo orbo : orbados){
-				if (orbo.getxPos() >= tower.getxPos()+300||
-					orbo.getyPos() >= tower.getyPos()+300||
-					orbo.getxPos() <= tower.getxPos()-300 ||
-					orbo.getxPos() <= tower.getxPos()-300)
-					
-				 {
-				inRange = true;
-				if (inRange== true){
-				bullet.add(bulletShooting);
-				for(Bullets bullet :bullet){
-				FastTower fastTowerAttacking = createNewFastTower(getX(), getY());
-				this.fastTowerShooting= new Timer(fastTowerAttacking.getAttackSpeed(), this);
-				bullet.setBulletX(tower.getxPos()+40);
-				bullet.setBulletY(tower.getyPos()+40);
-				fastTowerAttacking.setAttackSpeed(300);				
-				fastTowerShooting.start();
-						System.out.println(bullet.getBulletXVelocity());
-				g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-				g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-	
-				//	if(g.drawRect(tower.getxPos(), tower.getyPos(), 30, 30);
-				}
+			for (Orbo orbo : orbados) {
+				if (orbo.getxPos() <= tower.getxPos() + 300 && orbo.getyPos() <= tower.getyPos() + 300
+						&& orbo.getxPos() >= tower.getxPos() - 300 && orbo.getyPos() >= tower.getyPos() - 300)
+
+				{
+					inRange = true;
+					if (inRange == true) {
+						fastTowerShooting.start();
+						for (Bullets bullet : bullet) {
+							if(bullet.isJustFired() == true){
+								bullet.setBulletX(tower.getxPos() + 40);
+								bullet.setBulletY(tower.getyPos() + 40);
+								bullet.setJustFired(false);
+							}
+							if(bullet.isJustFired() == false){
+								bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
+								bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
+							}
+							if (fastTowerBulletFired) {
+								g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+								g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+								fastTowerBulletFired = false;
+							}
+							// if(g.drawRect(tower.getxPos(), tower.getyPos(),
+							// 30, 30);
+						}
 					}
-				 }
+				}
 			}
 
 		}
@@ -573,7 +577,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(jButton4)){
+		if (e.getSource().equals(jButton4)) {
 			game.towerUpgrade(selectedTower);
 			money = money - selectedTower.getUpgradePrice();
 			jButton4.setEnabled(false);
@@ -630,18 +634,22 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 				if (orbados.get(i).getxPos() >= 1555 && orbados.get(i).getyPos() < 990
 						&& orbados.get(i).getyPos() > 980) {
-						orbados.remove(i);
-						towerHealth -= 5;
-					}
+					orbados.remove(i);
+					towerHealth -= 5;
+				}
 			}
 		}
-		if(e.getSource().equals(fastTowerShooting)){
-			System.out.println("yo");
-			
-			for(Bullets bullet : bullet){
-				bullet.setBulletX(bullet.getBulletX()+bullet.getBulletXVelocity());
-				bullet.setBulletY(bullet.getBulletY()+bullet.getBulletYVelocity());
+		if (e.getSource().equals(fastTowerShooting)) {
+			if (inRange = true) {
+				bullet.add(bulletShooting);
 			}
+			fastTowerBulletFired = true;
+			for (Bullets bullet : bullet) {
+				bullet.setJustFired(true);
+				bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
+				bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
+			}
+
 		}
 		this.repaint();
 	}
@@ -653,7 +661,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (e.getX() > tower.getxPos() && e.getX() < tower.getxPos() + lightTower.getWidth()
 					&& e.getY() > tower.getyPos() && e.getY() < tower.getyPos() + lightTower.getHeight()) {
 				selectedTower = tower;
-				if(selectedTower.getPrice() < money){
+				if (selectedTower.getPrice() < money) {
 					jButton4.setEnabled(true);
 				} else {
 					jButton4.setEnabled(false);
@@ -751,39 +759,56 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	public boolean checkTowerPos() {
 		boolean canSpawn = false;
+		
 		if (mouseClickedX >= 295 && mouseClickedY >= 162) {
 			if (mouseClickedX <= 467 && mouseClickedY <= 840) {
+				System.out.println(mouseClickedX + " " + mouseClickedY);
+				canSpawn = true;
+				System.out.println("1");
+			}
+		}
+		if (mouseClickedX >= 550 && mouseClickedY >= 70) {
+			System.out.println(mouseClickedX + " " + mouseClickedY);
+			System.out.println("2");
+			if (mouseClickedX <= 730 && mouseClickedY <= 890) {
+				
+				canSpawn = true;
+				
+			}
+		}
+		if (mouseClickedX >= 200 && mouseClickedY >= 900) {
+			System.out.println(mouseClickedX + " " + mouseClickedY);
+			System.out.println("3");
+			if (mouseClickedX <= 780 && mouseClickedY <= 1130) {
 				canSpawn = true;
 			}
 		}
-		if (mouseClickedX >= 100 && mouseClickedY >= 660){
-			if (mouseClickedX <= 295 && mouseClickedY <= 840){
+		if (mouseClickedX >= 870 && mouseClickedY >= 180) {
+			if (mouseClickedX <= 1010 && mouseClickedY <= 1310) {
+				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
+				System.out.println("4");
 			}
 		}
-		if (mouseClickedX >= 190 && mouseClickedY >= 930){
-			if (mouseClickedX <= 780 && mouseClickedY <= 940){
+		if (mouseClickedX >= 1100 && mouseClickedY >= 90) {
+			if (mouseClickedX <= 1240 && mouseClickedY <= 1310) {
+				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
+				System.out.println("5");
 			}
 		}
-		if (mouseClickedX >= 870 && mouseClickedY >= 180){
-			if (mouseClickedX <= 1010 && mouseClickedY <= 940){
+		if (mouseClickedX >= 1380 && mouseClickedY >= 0) {
+			if (mouseClickedX <= 1450 && mouseClickedY <= 1480) {
+				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
+				System.out.println("6");
 			}
 		}
-		if (mouseClickedX >= 1100 && mouseClickedY >= 90){
-			if (mouseClickedX <= 1240 && mouseClickedY <= 1310){
+		if (mouseClickedX >= 1370 && mouseClickedY >= 140) {
+			if (mouseClickedX <= 1580 && mouseClickedY <= 980) {
+				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
-			}
-		}
-		if (mouseClickedX >= 1380 && mouseClickedY >= 0){
-			if (mouseClickedX <= 1450 && mouseClickedY <= 1480){
-				canSpawn = true;
-			}
-		}
-		if (mouseClickedX >= 1370 && mouseClickedY >= 140){
-			if (mouseClickedX <= 1580 && mouseClickedY <= 980){
-				canSpawn = true;
+				System.out.println("7");
 			}
 		}
 		return canSpawn;
