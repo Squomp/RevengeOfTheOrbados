@@ -57,9 +57,7 @@ public class Bullets {
 	public boolean isJustFired() {
 		return justFired;
 	}
-	/**
-	 * @param justFired the justFired to set
-	 */
+	
 	public void setJustFired(boolean justFired) {
 		this.justFired = justFired;
 	}
