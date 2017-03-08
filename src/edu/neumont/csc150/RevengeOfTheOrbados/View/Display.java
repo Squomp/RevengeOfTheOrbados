@@ -461,15 +461,20 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (tower instanceof FastTower) {
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
-			for (Orbo orbo : orbados) {
-				if (orbo.getxPos() <= tower.getxPos() + 300 && orbo.getyPos() <= tower.getyPos() + 300
-						&& orbo.getxPos() >= tower.getxPos() - 300 && orbo.getyPos() >= tower.getyPos() - 300)
-
-				{
+			for(Orbo orbo : orbados){
+				if (orbo.getxPos() <= (tower.getxPos()+(fastTower.getWidth()/2))+300&&
+					orbo.getyPos() <= (tower.getyPos()+(fastTower.getHeight()/2))+300&&
+					orbo.getxPos() >= (tower.getxPos()+(fastTower.getWidth()/2))-300 &&
+					orbo.getyPos() >= (tower.getyPos()+(fastTower.getHeight()/2))-300)
+					
+				 {
 					inRange = true;
 					if (inRange == true) {
 						fastTowerShooting.start();
+						int xv = 0;
+
 						for (Bullets bullet : bullet) {
+							
 							if(bullet.isJustFired() == true){
 								bullet.setBulletX(tower.getxPos() + 40);
 								bullet.setBulletY(tower.getyPos() + 40);
@@ -484,6 +489,22 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 								g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
 								fastTowerBulletFired = false;
 							}
+								
+								bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
+			                    bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
+								if(orbo.getxPos() < tower.getxPos()){
+			                        xv = -5;
+			                    }
+			                    else if(orbo.getxPos() > tower.getxPos()){
+			                        xv = 5;
+			                    }
+			                    else if(orbo.getxPos() == tower.getxPos()){
+			                        xv = 0;
+			                    }
+			                    bullet.setBulletX(bullet.getBulletX() + xv);
+			                    double m = (orbo.getyPos() - tower.getyPos())/(orbo.getxPos() - tower.getxPos());
+			                    int yv = (int) (m * xv);
+			                    bullet.setBulletY(bullet.getBulletX() + yv);
 							// if(g.drawRect(tower.getxPos(), tower.getyPos(),
 							// 30, 30);
 						}
