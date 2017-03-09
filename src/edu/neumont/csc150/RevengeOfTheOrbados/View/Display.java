@@ -76,7 +76,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	private BufferedImage levelBackground;
 
-	private int buyTimeCounter = 5;
+	private int buyTimeCounter = 30;
 	private int orboSpawnCounter = 0;
 
 	private int numOfOrbados = 20;
@@ -129,7 +129,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jLabel3 = new javax.swing.JLabel();
 
 		window = new JFrame();
-		// initializeStartMenu(window);
+		initializeStartMenu(window);
 
 		window.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -331,7 +331,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		if (orboSpawnCounter == numOfOrbados) {
 			orboSpawnCounter = 0;
-			buyTimeCounter = 5;
+			buyTimeCounter = 30;
 			this.orboSpawnTimer.stop();
 			numOfOrbados = numOfOrbados + 10;
 			if (orboSpawnTimer.getDelay() > 300) {
