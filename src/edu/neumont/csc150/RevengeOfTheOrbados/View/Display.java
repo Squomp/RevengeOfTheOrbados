@@ -76,7 +76,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	private BufferedImage levelBackground;
 
-	private int buyTimeCounter = 5;
+	private int buyTimeCounter = 30;
 	private int orboSpawnCounter = 0;
 
 	private int numOfOrbados = 20;
@@ -129,7 +129,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		jLabel3 = new javax.swing.JLabel();
 
 		window = new JFrame();
-		// initializeStartMenu(window);
+		initializeStartMenu(window);
 
 		window.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -331,7 +331,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		if (orboSpawnCounter == numOfOrbados) {
 			orboSpawnCounter = 0;
-			buyTimeCounter = 5;
+			buyTimeCounter = 30;
 			this.orboSpawnTimer.stop();
 			numOfOrbados = numOfOrbados + 10;
 			if (orboSpawnTimer.getDelay() > 300) {
@@ -339,16 +339,15 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 
-		/*
-		 * try { checkForLoss(); } catch (IOException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace();
-		 */
+		
+		 try { 
+			 checkForLoss(); 
+		 }
+		 catch (IOException e) {
+			 e.printStackTrace();
+		 }
 
-		/*
-		 * try { checkForLoss(); } catch (IOException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 */
-
+		
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
@@ -388,10 +387,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				money = money - ht.getPrice();
 				mousePlacedX = 0;
 				mousePlacedX = 0;
-			} else {
-				isHeavyTowerSelected = false;
-				isHeavyTowerClicked = false;
 			}
+			isHeavyTowerSelected = false;
+			isHeavyTowerClicked = false;
 			isHeavyTowerPlaced = false;
 
 		}
@@ -412,10 +410,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				money = money - lt.getPrice();
 				mousePlacedX = 0;
 				mousePlacedX = 0;
-			} else {
-				isLightTowerSelected = false;
-				isLightTowerClicked = false;
-			}
+			} 
+			isLightTowerSelected = false;
+			isLightTowerClicked = false;
 			isLightTowerPlaced = false;
 
 		}
@@ -438,10 +435,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				money = money - ft.getPrice();
 				mousePlacedX = 0;
 				mousePlacedX = 0;
-			} else {
-				isFastTowerSelected = false;
-				isFastTowerClicked = false;
 			}
+			isFastTowerSelected = false;
+			isFastTowerClicked = false;
 			isFastTowerPlaced = false;
 		}
 
