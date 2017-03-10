@@ -47,7 +47,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
-			isLightTowerClicked = false, orboTargeted;
+			isLightTowerClicked = false, orboTargeted = false;
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
@@ -456,7 +456,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
 
-			if (orboTargeted = false) {
+			if (orboTargeted == false) {
 				for (int i = 0; i < orbados.size(); i++) {
 					if (orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
 							&& orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
@@ -511,6 +511,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 							|| orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
 							|| orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) - 300
 							|| orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300){
+						System.out.println("Does this work");
 						orboTargeted = false;
 						inRange = false;
 					} else if(orbados.get(i).getLevel() <= 0){
