@@ -47,7 +47,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
-			isLightTowerClicked = false, orboTargeted = false;
+			isLightTowerClicked = false, orboTargeted = false, buyPeriod;
 			
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
@@ -324,6 +324,13 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		if (orbados.isEmpty() && !this.orboSpawnTimer.isRunning() && !this.buyTimer.isRunning()) {
 			startRound();
 		}
+		
+		if(this.buyTimer.isRunning()){
+			buyPeriod = true;
+		}
+		else if(!this.buyTimer.isRunning()){
+			buyPeriod = false;
+		}
 
 		if (buyTimeCounter == 0) {
 			orboSpawnTimer.start();
@@ -349,98 +356,99 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			 e.printStackTrace();
 		 }
 
-		
-		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
-			if (isMouseInGame == true) {
-				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
-						this);
+		if (buyPeriod) {
+			if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
+				if (isMouseInGame == true) {
+					g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)),
+							(mouseY - (fastTower.getHeight() / 2)), this);
+				}
+
 			}
 
-		}
+			if (isLightTowerSelected == true && isHeavyTowerSelected != true && isFastTowerSelected != true) {
+				if (isMouseInGame == true) {
+					g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)),
+							(mouseY - (lightTower.getHeight() / 2)), this);
+				}
 
-		if (isLightTowerSelected == true && isHeavyTowerSelected != true && isFastTowerSelected != true) {
-			if (isMouseInGame == true) {
-				g.drawImage(lightTower, (mouseX - (lightTower.getWidth() / 2)), (mouseY - (lightTower.getHeight() / 2)),
-						this);
 			}
+			if (isHeavyTowerSelected == true && isLightTowerSelected != true && isFastTowerSelected != true) {
+				if (isMouseInGame == true) {
+					g.drawImage(heavyTower, (mouseX - (heavyTower.getWidth() / 2)),
+							(mouseY - (heavyTower.getHeight() / 2)), this);
+				}
 
-		}
-		if (isHeavyTowerSelected == true && isLightTowerSelected != true && isFastTowerSelected != true) {
-			if (isMouseInGame == true) {
-				g.drawImage(heavyTower, (mouseX - (heavyTower.getWidth() / 2)), (mouseY - (heavyTower.getHeight() / 2)),
-						this);
 			}
+			if (isHeavyTowerClicked == true) {
+				isHeavyTowerPlaced = false;
+				if (checkTowerPos() == true) {
+					g.drawImage(heavyTower, (mouseClickedX - (heavyTower.getWidth() / 2)),
+							(mouseClickedY - (heavyTower.getHeight() / 2)), this);
+					mousePlacedX = (mouseClickedX - (heavyTower.getWidth() / 2));
+					mousePlacedY = (mouseClickedY - (heavyTower.getHeight() / 2));
+					isHeavyTowerPlaced = true;
+				}
+			}
+			if (isHeavyTowerPlaced) {
+				Tower ht = createHeavyTower(mousePlacedX, mousePlacedY);
+				if (ht.getPrice() <= money) {
+					towersPlaced.add(ht);
+					money = money - ht.getPrice();
+					mousePlacedX = 0;
+					mousePlacedX = 0;
+				}
+				isHeavyTowerSelected = false;
+				isHeavyTowerClicked = false;
+				isHeavyTowerPlaced = false;
 
-		}
-		if (isHeavyTowerClicked == true) {
-			isHeavyTowerPlaced = false;
-			if (checkTowerPos() == true) {
-				g.drawImage(heavyTower, (mouseClickedX - (heavyTower.getWidth() / 2)),
-						(mouseClickedY - (heavyTower.getHeight() / 2)), this);
-				mousePlacedX = (mouseClickedX - (heavyTower.getWidth() / 2));
-				mousePlacedY = (mouseClickedY - (heavyTower.getHeight() / 2));
-				isHeavyTowerPlaced = true;
 			}
-		}
-		if (isHeavyTowerPlaced) {
-			Tower ht = createHeavyTower(mousePlacedX, mousePlacedY);
-			if (ht.getPrice() <= money) {
-				towersPlaced.add(ht);
-				money = money - ht.getPrice();
-				mousePlacedX = 0;
-				mousePlacedX = 0;
+			if (isLightTowerClicked == true) {
+				isLightTowerPlaced = false;
+				if (checkTowerPos() == true) {
+					g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
+							(mouseClickedY - (lightTower.getHeight() / 2)), this);
+					mousePlacedX = (mouseClickedX - (lightTower.getWidth() / 2));
+					mousePlacedY = (mouseClickedY - (lightTower.getHeight() / 2));
+					isLightTowerPlaced = true;
+				}
 			}
-			isHeavyTowerSelected = false;
-			isHeavyTowerClicked = false;
-			isHeavyTowerPlaced = false;
+			if (isLightTowerPlaced) {
+				Tower lt = createNewLightTower(mousePlacedX, mousePlacedY);
+				if (lt.getPrice() <= money) {
+					towersPlaced.add(lt);
+					money = money - lt.getPrice();
+					mousePlacedX = 0;
+					mousePlacedX = 0;
+				}
+				isLightTowerSelected = false;
+				isLightTowerClicked = false;
+				isLightTowerPlaced = false;
 
-		}
-		if (isLightTowerClicked == true) {
-			isLightTowerPlaced = false;
-			if (checkTowerPos() == true) {
-				g.drawImage(lightTower, (mouseClickedX - (lightTower.getWidth() / 2)),
-						(mouseClickedY - (lightTower.getHeight() / 2)), this);
-				mousePlacedX = (mouseClickedX - (lightTower.getWidth() / 2));
-				mousePlacedY = (mouseClickedY - (lightTower.getHeight() / 2));
-				isLightTowerPlaced = true;
 			}
-		}
-		if (isLightTowerPlaced) {
-			Tower lt = createNewLightTower(mousePlacedX, mousePlacedY);
-			if (lt.getPrice() <= money) {
-				towersPlaced.add(lt);
-				money = money - lt.getPrice();
-				mousePlacedX = 0;
-				mousePlacedX = 0;
-			} 
-			isLightTowerSelected = false;
-			isLightTowerClicked = false;
-			isLightTowerPlaced = false;
+			if (isFastTowerClicked == true) {
+				isFastTowerPlaced = false;
+				if (checkTowerPos() == true) {
+					g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
+							(mouseClickedY - (fastTower.getHeight() / 2)), this);
+					mousePlacedX = (mouseClickedX - (fastTower.getWidth() / 2));
+					mousePlacedY = (mouseClickedY - (fastTower.getHeight() / 2));
+					isFastTowerPlaced = true;
+				}
 
-		}
-		if (isFastTowerClicked == true) {
-			isFastTowerPlaced = false;
-			if (checkTowerPos() == true) {
-				g.drawImage(fastTower, (mouseClickedX - (fastTower.getWidth() / 2)),
-						(mouseClickedY - (fastTower.getHeight() / 2)), this);
-				mousePlacedX = (mouseClickedX - (fastTower.getWidth() / 2));
-				mousePlacedY = (mouseClickedY - (fastTower.getHeight() / 2));
-				isFastTowerPlaced = true;
 			}
-
-		}
-		if (isFastTowerPlaced) {
-			Tower ft = createNewFastTower(mousePlacedX, mousePlacedY);
-			if (ft.getPrice() <= money) {
-				towersPlaced.add(ft);
-				// }
-				money = money - ft.getPrice();
-				mousePlacedX = 0;
-				mousePlacedX = 0;
+			if (isFastTowerPlaced) {
+				Tower ft = createNewFastTower(mousePlacedX, mousePlacedY);
+				if (ft.getPrice() <= money) {
+					towersPlaced.add(ft);
+					// }
+					money = money - ft.getPrice();
+					mousePlacedX = 0;
+					mousePlacedX = 0;
+				}
+				isFastTowerSelected = false;
+				isFastTowerClicked = false;
+				isFastTowerPlaced = false;
 			}
-			isFastTowerSelected = false;
-			isFastTowerClicked = false;
-			isFastTowerPlaced = false;
 		}
 
 		for (Tower tower : towersPlaced) {
@@ -453,18 +461,16 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (tower instanceof FastTower) {
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
-
 			if (orboTargeted == false) {
 				for (int i = 0; i < orbados.size(); i++) {
 					if (orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
 							&& orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
 							&& orbados.get(i).getxPos() >= (tower.getxPos() + (fastTower.getWidth() / 2)) - 300
 							&& orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300)
-
 					{
 						tower.setOrboTargeted(orbados.get(i));
 						orboTargeted = true;
-						fastTowerShooting.start();
+						this.fastTowerShooting.start();
 						int xv = 0;
 						for (Bullets bullet : bullet) {
 
@@ -492,16 +498,19 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 							} else if (orbados.get(i).getxPos() == tower.getxPos()) {
 								xv = 0;
 							}
-							bullet.setBulletX(bullet.getBulletX() + xv);
+							/*bullet.setBulletX(bullet.getBulletX() + xv);
 							double m = (orbados.get(i).getyPos() - tower.getyPos())
 									/ (orbados.get(i).getxPos() - tower.getxPos());
 							int yv = (int) (m * xv);
-							bullet.setBulletY(bullet.getBulletX() + yv);
+							bullet.setBulletY(bullet.getBulletX() + yv);*/
 							// if(g.drawRect(tower.getxPos(),
 							// tower.getyPos(),
 							// 30, 30);
 						}
 
+					}
+					else{
+						this.fastTowerShooting.stop();
 					}
 					if (orbados.get(i).getxPos() >= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
 							|| orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
@@ -509,14 +518,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 							|| orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300){
 
 						orboTargeted = false;
-						fastTowerShooting.stop();
 					} 
-					if(orbados.get(i).getLevel() <= 0){
-						money = money + orbados.get(i).getMoneyPerKill();
-						orbados.remove(i);
-						orboTargeted = false;
-						fastTowerShooting.stop();
-					}
 				}
 			}
 
@@ -668,11 +670,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				}
 			}
 		}
-		if (e.getSource().equals(fastTowerShooting)) {
+		if (e.getSource() == this.fastTowerShooting) {
 			for (Tower tower : towersPlaced) {
 				if (tower instanceof FastTower) {
 					bullet.add(bulletShooting);
-					game.orboLoseHealth(tower.getOrboTargeted(), tower.getDmg());
+					orboShot(tower);
 				}
 			}
 			fastTowerBulletFired = true;
@@ -680,6 +682,35 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		this.repaint();
 	}
 
+	/**
+	 * Decreases orbo level accordingly
+	 * @param tower
+	 */
+	public void orboShot(Tower tower){
+		int l = game.orboLoseHealth(tower.getOrboTargeted(), tower.getDmg());
+		
+		if(l > 0 && l <= 2){
+			System.out.println("orb in green");
+			tower.getOrboTargeted().setColor(Color.green);
+		}
+		else if(l > 2 && l <= 4){
+			System.out.println("orb in blue");
+			tower.getOrboTargeted().setColor(Color.BLUE);
+		}
+		else if(l > 4 && l <= 6){
+			System.out.println("orb in red");
+			tower.getOrboTargeted().setColor(Color.RED);
+		}
+		else if(l <= 0){
+			System.out.println("orb died");
+			orbados.remove(tower.getOrboTargeted());
+			money = money + tower.getOrboTargeted().getMoneyPerKill();
+			tower.setOrboTargeted(null);
+			orboTargeted = false;
+			this.fastTowerShooting.stop();
+		}
+	}
+	
 	// change for push
 	@Override
 	public void mouseClicked(MouseEvent e) {

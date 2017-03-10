@@ -42,18 +42,10 @@ public class GameManager {
 	 * @param orbo
 	 * @param dmgDone
 	 */
-	public void orboLoseHealth(Orbo orbo, int dmgDone) {
+	public int orboLoseHealth(Orbo orbo, int dmgDone) {
+		System.out.println(dmgDone);
 		orbo.setLevel(orbo.getLevel() - dmgDone);
-		int l = orbo.getLevel();
-		if(l > 0 && l <= 2){
-			orbo.setColor(Color.green);
-		}
-		else if(l > 2 && l <= 4){
-			orbo.setColor(Color.BLUE);
-		}
-		else if(l > 4 && l <= 6){
-			orbo.setColor(Color.RED);
-		}
+		return orbo.getLevel();
 	}
 
 	/**
