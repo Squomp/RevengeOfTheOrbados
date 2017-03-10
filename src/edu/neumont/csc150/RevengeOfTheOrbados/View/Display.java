@@ -48,6 +48,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
 			isLightTowerClicked = false, orboTargeted = false;
+			
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
 	private int towerHealth = 100;
@@ -55,6 +56,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private int money = 500;
 	private int orboLocation = 0;
 	private int dmgDone = 0;
+	private final int BUY_TIME = 10;
 	Tower selectedTower = null;
 
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
@@ -76,7 +78,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 	private BufferedImage levelBackground;
 
-	private int buyTimeCounter = 30;
+	private int buyTimeCounter = BUY_TIME;
 	private int orboSpawnCounter = 0;
 
 	private int numOfOrbados = 20;
@@ -331,7 +333,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		if (orboSpawnCounter == numOfOrbados) {
 			orboSpawnCounter = 0;
-			buyTimeCounter = 30;
+			buyTimeCounter = BUY_TIME;
 			this.orboSpawnTimer.stop();
 			numOfOrbados = numOfOrbados + 10;
 			if (orboSpawnTimer.getDelay() > 300) {
@@ -460,60 +462,60 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 							&& orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300)
 
 					{
+						tower.setOrboTargeted(orbados.get(i));
 						orboTargeted = true;
-						inRange = true;
-						if (inRange == true) {
-							game.orboLoseHealth(orbados.get(i), tower.getDmg());
-							fastTowerShooting.start();
-							int xv = 0;
+						fastTowerShooting.start();
+						int xv = 0;
+						for (Bullets bullet : bullet) {
 
-							for (Bullets bullet : bullet) {
-
-								if (bullet.isJustFired() == true) {
-									bullet.setBulletX(tower.getxPos() + 40);
-									bullet.setBulletY(tower.getyPos() + 40);
-									bullet.setJustFired(false);
-								}
-								if (bullet.isJustFired() == false) {
-									bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
-									bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
-								}
-								if (fastTowerBulletFired) {
-									g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-									g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-									fastTowerBulletFired = false;
-								}
-
-								bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
-								bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
-								if (orbados.get(i).getxPos() < tower.getxPos()) {
-									xv = -5;
-								} else if (orbados.get(i).getxPos() > tower.getxPos()) {
-									xv = 5;
-								} else if (orbados.get(i).getxPos() == tower.getxPos()) {
-									xv = 0;
-								}
-								bullet.setBulletX(bullet.getBulletX() + xv);
-								double m = (orbados.get(i).getyPos() - tower.getyPos()) / (orbados.get(i).getxPos() - tower.getxPos());
-								int yv = (int) (m * xv);
-								bullet.setBulletY(bullet.getBulletX() + yv);
-								// if(g.drawRect(tower.getxPos(),
-								// tower.getyPos(),
-								// 30, 30);
+							if (bullet.isJustFired() == true) {
+								bullet.setBulletX(tower.getxPos() + 40);
+								bullet.setBulletY(tower.getyPos() + 40);
+								bullet.setJustFired(false);
 							}
+							if (bullet.isJustFired() == false) {
+								bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
+								bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
+							}
+							if (fastTowerBulletFired) {
+								g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+								g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+								fastTowerBulletFired = false;
+							}
+
+							bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
+							bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
+							if (orbados.get(i).getxPos() < tower.getxPos()) {
+								xv = -5;
+							} else if (orbados.get(i).getxPos() > tower.getxPos()) {
+								xv = 5;
+							} else if (orbados.get(i).getxPos() == tower.getxPos()) {
+								xv = 0;
+							}
+							bullet.setBulletX(bullet.getBulletX() + xv);
+							double m = (orbados.get(i).getyPos() - tower.getyPos())
+									/ (orbados.get(i).getxPos() - tower.getxPos());
+							int yv = (int) (m * xv);
+							bullet.setBulletY(bullet.getBulletX() + yv);
+							// if(g.drawRect(tower.getxPos(),
+							// tower.getyPos(),
+							// 30, 30);
 						}
+
 					}
 					if (orbados.get(i).getxPos() >= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
 							|| orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
 							|| orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) - 300
 							|| orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300){
-						System.out.println("Does this work");
+
 						orboTargeted = false;
-						inRange = false;
-					} else if(orbados.get(i).getLevel() <= 0){
+						fastTowerShooting.stop();
+					} 
+					if(orbados.get(i).getLevel() <= 0){
 						money = money + orbados.get(i).getMoneyPerKill();
 						orbados.remove(i);
 						orboTargeted = false;
+						fastTowerShooting.stop();
 					}
 				}
 			}
@@ -667,9 +669,11 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 		if (e.getSource().equals(fastTowerShooting)) {
-			if (inRange = true) {
-				bullet.add(bulletShooting);
-				//game.orboLoseHealth(orbados.get(orboLocation), dmgDone);
+			for (Tower tower : towersPlaced) {
+				if (tower instanceof FastTower) {
+					bullet.add(bulletShooting);
+					game.orboLoseHealth(tower.getOrboTargeted(), tower.getDmg());
+				}
 			}
 			fastTowerBulletFired = true;
 		}
@@ -695,7 +699,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 
 		if (e.getSource().equals(jButton4)) {
-			game.towerUpgrade(selectedTower);
+			if(selectedTower.getPrice() < money){
+				game.towerUpgrade(selectedTower);
+			}
 		}
 
 		if (e.getSource().equals(jButton2)) {
@@ -784,14 +790,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		
 		if (mouseClickedX >= 295 && mouseClickedY >= 162) {
 			if (mouseClickedX <= 467 && mouseClickedY <= 840) {
-				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
-				System.out.println("1");
 			}
 		}
 		if (mouseClickedX >= 550 && mouseClickedY >= 70) {
-			System.out.println(mouseClickedX + " " + mouseClickedY);
-			System.out.println("2");
 			if (mouseClickedX <= 730 && mouseClickedY <= 890) {
 				
 				canSpawn = true;
@@ -799,38 +801,28 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 		if (mouseClickedX >= 200 && mouseClickedY >= 900) {
-			System.out.println(mouseClickedX + " " + mouseClickedY);
-			System.out.println("3");
 			if (mouseClickedX <= 780 && mouseClickedY <= 1130) {
 				canSpawn = true;
 			}
 		}
 		if (mouseClickedX >= 870 && mouseClickedY >= 180) {
 			if (mouseClickedX <= 1010 && mouseClickedY <= 1310) {
-				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
-				System.out.println("4");
 			}
 		}
 		if (mouseClickedX >= 1100 && mouseClickedY >= 90) {
 			if (mouseClickedX <= 1240 && mouseClickedY <= 1310) {
-				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
-				System.out.println("5");
 			}
 		}
 		if (mouseClickedX >= 1380 && mouseClickedY >= 0) {
 			if (mouseClickedX <= 1450 && mouseClickedY <= 1480) {
-				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
-				System.out.println("6");
 			}
 		}
 		if (mouseClickedX >= 1370 && mouseClickedY >= 140) {
 			if (mouseClickedX <= 1580 && mouseClickedY <= 980) {
-				System.out.println(mouseClickedX + " " + mouseClickedY);
 				canSpawn = true;
-				System.out.println("7");
 			}
 		}
 		return canSpawn;
