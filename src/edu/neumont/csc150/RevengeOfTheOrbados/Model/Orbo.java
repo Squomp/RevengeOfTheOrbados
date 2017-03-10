@@ -32,9 +32,7 @@ public class Orbo {
 	 * @param level the level to set
 	 */
 	public void setLevel(int level) {
-		if(level >= 1 && level <= 3){
-			this.level = level;
-		}
+		this.level = level;
 	}
 
 	/**

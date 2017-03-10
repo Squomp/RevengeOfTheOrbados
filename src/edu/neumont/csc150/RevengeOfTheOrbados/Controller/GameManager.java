@@ -43,7 +43,6 @@ public class GameManager {
 	 * @param dmgDone
 	 */
 	public int orboLoseHealth(Orbo orbo, int dmgDone) {
-		System.out.println(dmgDone);
 		orbo.setLevel(orbo.getLevel() - dmgDone);
 		return orbo.getLevel();
 	}

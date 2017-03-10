@@ -4,6 +4,7 @@ public class Tower {
 
 	private int health, price, dmg, upgradePrice, sellPrice, attackSpeed, xPos, yPos;
 	private Orbo orboTargeted;
+	private boolean targeted;
 
 	/**
 	 * new default instance of parent class Tower
@@ -136,6 +137,20 @@ public class Tower {
 	 */
 	public void setOrboTargeted(Orbo orboTargeted) {
 		this.orboTargeted = orboTargeted;
+	}
+
+	/**
+	 * @return the targeted
+	 */
+	public boolean isTargeted() {
+		return targeted;
+	}
+
+	/**
+	 * @param targeted the targeted to set
+	 */
+	public void setTargeted(boolean targeted) {
+		this.targeted = targeted;
 	}
 	
 }

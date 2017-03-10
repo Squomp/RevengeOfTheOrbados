@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.management.InstanceAlreadyExistsException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -43,7 +44,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private ArrayList<Tower> towersPlaced = new ArrayList<>();
 	private List<Bullets> bullet = new ArrayList<>();
 	private Bullets bulletShooting = new Bullets();
-	private boolean fastTowerBulletFired = false;
+	private boolean fastTowerBulletFired = false, lightTowerBulletFired = false, heavyTowerBulletFired = false;
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
@@ -265,6 +266,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		this.orboSpawnTimer = new Timer(1000, this);
 		this.orboMoveTimer = new Timer(1, this);
 		this.fastTowerShooting = new Timer(300, this);
+		this.lightTowerShooting = new Timer(800, this);
+		this.heavyTowerShooting = new Timer(1500, this);
 	}// </editor-fold>
 
 	/**
@@ -392,7 +395,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (isHeavyTowerPlaced) {
 				Tower ht = createHeavyTower(mousePlacedX, mousePlacedY);
 				if (ht.getPrice() <= money) {
-					towersPlaced.add(ht);
+					towersPlaced.add(createHeavyTower(mousePlacedX, mousePlacedY));
 					money = money - ht.getPrice();
 					mousePlacedX = 0;
 					mousePlacedX = 0;
@@ -415,7 +418,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (isLightTowerPlaced) {
 				Tower lt = createNewLightTower(mousePlacedX, mousePlacedY);
 				if (lt.getPrice() <= money) {
-					towersPlaced.add(lt);
+					towersPlaced.add(createNewLightTower(mousePlacedX, mousePlacedY));
 					money = money - lt.getPrice();
 					mousePlacedX = 0;
 					mousePlacedX = 0;
@@ -439,7 +442,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (isFastTowerPlaced) {
 				Tower ft = createNewFastTower(mousePlacedX, mousePlacedY);
 				if (ft.getPrice() <= money) {
-					towersPlaced.add(ft);
+					towersPlaced.add(createNewFastTower(mousePlacedX, mousePlacedY));
 					// }
 					money = money - ft.getPrice();
 					mousePlacedX = 0;
@@ -461,7 +464,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (tower instanceof FastTower) {
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
-			if (orboTargeted == false) {
+		}
+		for (Tower tower: towersPlaced){
+			if (tower.isTargeted() == false) {
 				for (int i = 0; i < orbados.size(); i++) {
 					if (orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
 							&& orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
@@ -469,55 +474,63 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 							&& orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300)
 					{
 						tower.setOrboTargeted(orbados.get(i));
-						orboTargeted = true;
-						this.fastTowerShooting.start();
-						int xv = 0;
-						for (Bullets bullet : bullet) {
-
-							if (bullet.isJustFired() == true) {
-								bullet.setBulletX(tower.getxPos() + 40);
-								bullet.setBulletY(tower.getyPos() + 40);
-								bullet.setJustFired(false);
-							}
-							if (bullet.isJustFired() == false) {
-								bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
-								bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
-							}
-							if (fastTowerBulletFired) {
-								g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-								g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-								fastTowerBulletFired = false;
-							}
-
-							bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
-							bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
-							if (orbados.get(i).getxPos() < tower.getxPos()) {
-								xv = -5;
-							} else if (orbados.get(i).getxPos() > tower.getxPos()) {
-								xv = 5;
-							} else if (orbados.get(i).getxPos() == tower.getxPos()) {
-								xv = 0;
-							}
-							/*bullet.setBulletX(bullet.getBulletX() + xv);
-							double m = (orbados.get(i).getyPos() - tower.getyPos())
-									/ (orbados.get(i).getxPos() - tower.getxPos());
-							int yv = (int) (m * xv);
-							bullet.setBulletY(bullet.getBulletX() + yv);*/
+						tower.setTargeted(true);
+						if(tower instanceof FastTower){
+							this.fastTowerShooting.start();
+						} else if(tower instanceof LightTower){
+							this.lightTowerShooting.start();
+						} else if(tower instanceof HeavyTower){
+							this.heavyTowerShooting.start();
+						}
+//						
+//						int xv = 0;
+//						for (Bullets bullet : bullet) {
+//
+//							if (bullet.isJustFired() == true) {
+//								bullet.setBulletX(tower.getxPos() + 40);
+//								bullet.setBulletY(tower.getyPos() + 40);
+//								bullet.setJustFired(false);
+//							}
+//							if (bullet.isJustFired() == false) {
+//								bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
+//								bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
+//							}
+//							if (fastTowerBulletFired) {
+//								g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+//								g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
+//								fastTowerBulletFired = false;
+//							}
+//
+//							bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
+//							bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
+//							if (orbados.get(i).getxPos() < tower.getxPos()) {
+//								xv = -5;
+//							} else if (orbados.get(i).getxPos() > tower.getxPos()) {
+//								xv = 5;
+//							} else if (orbados.get(i).getxPos() == tower.getxPos()) {
+//								xv = 0;
+//							}
+//							bullet.setBulletX(bullet.getBulletX() + xv);
+//							double m = (orbados.get(i).getyPos() - tower.getyPos())
+//									/ (orbados.get(i).getxPos() - tower.getxPos());
+//							int yv = (int) (m * xv);
+//							bullet.setBulletY(bullet.getBulletX() + yv);
+							
 							// if(g.drawRect(tower.getxPos(),
 							// tower.getyPos(),
 							// 30, 30);
-						}
+//						}
 
 					}
-					else{
-						this.fastTowerShooting.stop();
-					}
+//					else{
+//						this.fastTowerShooting.stop();
+//					}
 					if (orbados.get(i).getxPos() >= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
 							|| orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
 							|| orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) - 300
 							|| orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300){
 
-						orboTargeted = false;
+						tower.setTargeted(false);
 					} 
 				}
 			}
@@ -679,6 +692,24 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 			fastTowerBulletFired = true;
 		}
+		if (e.getSource() == this.lightTowerShooting) {
+			for (Tower tower : towersPlaced) {
+				if (tower instanceof LightTower) {
+					bullet.add(bulletShooting);
+					orboShot(tower);
+				}
+			}
+			lightTowerBulletFired = true;
+		}
+		if (e.getSource() == this.heavyTowerShooting) {
+			for (Tower tower : towersPlaced) {
+				if (tower instanceof HeavyTower) {
+					bullet.add(bulletShooting);
+					orboShot(tower);
+				}
+			}
+			heavyTowerBulletFired = true;
+		}
 		this.repaint();
 	}
 
@@ -688,26 +719,31 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	 */
 	public void orboShot(Tower tower){
 		int l = game.orboLoseHealth(tower.getOrboTargeted(), tower.getDmg());
-		
 		if(l > 0 && l <= 2){
-			System.out.println("orb in green");
+		//	System.out.println("orb in green");
 			tower.getOrboTargeted().setColor(Color.green);
 		}
 		else if(l > 2 && l <= 4){
-			System.out.println("orb in blue");
+		//	System.out.println("orb in blue");
 			tower.getOrboTargeted().setColor(Color.BLUE);
 		}
 		else if(l > 4 && l <= 6){
-			System.out.println("orb in red");
+		//	System.out.println("orb in red");
 			tower.getOrboTargeted().setColor(Color.RED);
 		}
 		else if(l <= 0){
-			System.out.println("orb died");
+		//	System.out.println("orb died");
 			orbados.remove(tower.getOrboTargeted());
 			money = money + tower.getOrboTargeted().getMoneyPerKill();
 			tower.setOrboTargeted(null);
-			orboTargeted = false;
-			this.fastTowerShooting.stop();
+			tower.setTargeted(false);
+			if(tower instanceof FastTower){
+				this.fastTowerShooting.stop();
+			} else if(tower instanceof LightTower){
+				this.lightTowerShooting.stop();
+			} else if(tower instanceof HeavyTower){
+				this.heavyTowerShooting.stop();
+			}
 		}
 	}
 	
@@ -730,7 +766,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 
 		if (e.getSource().equals(jButton4)) {
-			if(selectedTower.getPrice() < money){
+			if(selectedTower.getPrice() < money && buyPeriod){
 				game.towerUpgrade(selectedTower);
 			}
 		}
