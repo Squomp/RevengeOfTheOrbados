@@ -339,16 +339,15 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			}
 		}
 
-		/*
-		 * try { checkForLoss(); } catch (IOException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace();
-		 */
+		
+		 try { 
+			 checkForLoss(); 
+		 }
+		 catch (IOException e) {
+			 e.printStackTrace();
+		 }
 
-		/*
-		 * try { checkForLoss(); } catch (IOException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 */
-
+		
 		if (isFastTowerSelected == true && isLightTowerSelected != true && isHeavyTowerSelected != true) {
 			if (isMouseInGame == true) {
 				g.drawImage(fastTower, (mouseX - (fastTower.getWidth() / 2)), (mouseY - (fastTower.getHeight() / 2)),
@@ -388,10 +387,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				money = money - ht.getPrice();
 				mousePlacedX = 0;
 				mousePlacedX = 0;
-			} else {
-				isHeavyTowerSelected = false;
-				isHeavyTowerClicked = false;
 			}
+			isHeavyTowerSelected = false;
+			isHeavyTowerClicked = false;
 			isHeavyTowerPlaced = false;
 
 		}
@@ -412,10 +410,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				money = money - lt.getPrice();
 				mousePlacedX = 0;
 				mousePlacedX = 0;
-			} else {
-				isLightTowerSelected = false;
-				isLightTowerClicked = false;
-			}
+			} 
+			isLightTowerSelected = false;
+			isLightTowerClicked = false;
 			isLightTowerPlaced = false;
 
 		}
@@ -438,10 +435,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				money = money - ft.getPrice();
 				mousePlacedX = 0;
 				mousePlacedX = 0;
-			} else {
-				isFastTowerSelected = false;
-				isFastTowerClicked = false;
 			}
+			isFastTowerSelected = false;
+			isFastTowerClicked = false;
 			isFastTowerPlaced = false;
 		}
 
@@ -456,7 +452,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				g.drawImage(fastTower, tower.getxPos(), tower.getyPos(), this);
 			}
 
-			if (orboTargeted = false) {
+			if (orboTargeted == false) {
 				for (int i = 0; i < orbados.size(); i++) {
 					if (orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
 							&& orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
