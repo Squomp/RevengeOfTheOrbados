@@ -1,10 +1,13 @@
 package edu.neumont.csc150.RevengeOfTheOrbados.Model;
 
+import javax.swing.Timer;
+
 public class Tower {
 
 	private int health, price, dmg, upgradePrice, sellPrice, attackSpeed, xPos, yPos;
 	private Orbo orboTargeted;
 	private boolean targeted;
+	private int time = 0;
 
 	/**
 	 * new default instance of parent class Tower
@@ -151,6 +154,20 @@ public class Tower {
 	 */
 	public void setTargeted(boolean targeted) {
 		this.targeted = targeted;
+	}
+
+	/**
+	 * @return the time
+	 */
+	public int getTime() {
+		return time;
+	}
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(int time) {
+		this.time = time;
 	}
 	
 }

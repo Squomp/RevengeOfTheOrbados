@@ -42,9 +42,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private BufferedImage lightTower, heavyTower, fastTower;
 	private ArrayList<Orbo> orbados = new ArrayList<>();
 	private ArrayList<Tower> towersPlaced = new ArrayList<>();
-	private List<Bullets> bullet = new ArrayList<>();
-	private Bullets bulletShooting = new Bullets();
-	private boolean fastTowerBulletFired = false, lightTowerBulletFired = false, heavyTowerBulletFired = false;
+	private List<Bullets> bullets = new ArrayList<>();
+	private boolean bulletFired = false;
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
@@ -87,6 +86,8 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private int orboSpawnCounter = 0;
 
 	private int numOfOrbados = 20;
+	
+	private Timer shootTimer = new Timer(1, this);
 
 	/**
 	 * create new Display instance
@@ -483,52 +484,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 						} else if(tower instanceof HeavyTower){
 							this.heavyTowerShooting.start();
 						}
-//						
-//						int xv = 0;
-//						for (Bullets bullet : bullet) {
-//
-//							if (bullet.isJustFired() == true) {
-//								bullet.setBulletX(tower.getxPos() + 40);
-//								bullet.setBulletY(tower.getyPos() + 40);
-//								bullet.setJustFired(false);
-//							}
-//							if (bullet.isJustFired() == false) {
-//								bullet.setBulletX(bullet.getBulletX() + bullet.getBulletXVelocity());
-//								bullet.setBulletY(bullet.getBulletY() + bullet.getBulletYVelocity());
-//							}
-//							if (fastTowerBulletFired) {
-//								g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-//								g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 30, 30);
-//								fastTowerBulletFired = false;
-//							}
-//
-//							bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
-//							bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
-//							if (orbados.get(i).getxPos() < tower.getxPos()) {
-//								xv = -5;
-//							} else if (orbados.get(i).getxPos() > tower.getxPos()) {
-//								xv = 5;
-//							} else if (orbados.get(i).getxPos() == tower.getxPos()) {
-//								xv = 0;
-//							}
-//							bullet.setBulletX(bullet.getBulletX() + xv);
-//							double m = (orbados.get(i).getyPos() - tower.getyPos())
-//									/ (orbados.get(i).getxPos() - tower.getxPos());
-//							int yv = (int) (m * xv);
-//							bullet.setBulletY(bullet.getBulletX() + yv);
-							
-							// if(g.drawRect(tower.getxPos(),
-							// tower.getyPos(),
-							// 30, 30);
-//						}
-
 					}
-//					else{
-//						this.fastTowerShooting.stop();
-//					} 
 				}
 			}
-
+		}
+		for(Bullets bullet: bullets){
+			g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 20, 20);
 		}
 		long endPaint = System.currentTimeMillis();
 		// System.out.println("Run of paint took " + (endPaint - startPart) + "
@@ -536,6 +497,31 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		this.repaint();
 	}
 
+	/**
+	 * creates a bullet at towers location and moves it to orbo location
+	 * @param tower
+	 * @param orbo
+	 */
+	public void shoot(Tower tower, Orbo orbo){
+		int xv = 0;
+		Bullets bullet = new Bullets();
+		bullet.setBulletX(tower.getxPos() + fastTower.getWidth());
+		bullet.setBulletY(tower.getyPos() + fastTower.getHeight());
+		if (orbo.getxPos() < tower.getxPos()) {
+			xv = -5;
+		} else if (orbo.getxPos() > tower.getxPos()) {
+			xv = 5;
+		} else if (orbo.getxPos() == tower.getxPos()) {
+			xv = 0;
+		}
+		bullet.setBulletX(bullet.getBulletX() + xv);
+		double m = (orbo.getyPos() - tower.getyPos()) / (orbo.getxPos() - tower.getxPos());
+		int yv = (int) (m * xv);
+		bullet.setBulletY(bullet.getBulletX() + yv);
+		bullets.add(bullet);
+	}
+
+	
 	/**
 	 * method that checks if the Tower has lost all health and prompts user with
 	 * endgame menu
@@ -679,30 +665,28 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (e.getSource() == this.fastTowerShooting) {
 			for (Tower tower : towersPlaced) {
+				tower.setTime(tower.getTime() + 1);
 				if (tower instanceof FastTower && tower.isTargeted()) {
-					bullet.add(bulletShooting);
 					orboShot(tower);
+					//shoot(tower, tower.getOrboTargeted());
 				}
 			}
-			fastTowerBulletFired = true;
 		}
 		if (e.getSource() == this.lightTowerShooting) {
 			for (Tower tower : towersPlaced) {
 				if (tower instanceof LightTower && tower.isTargeted()) {
-					bullet.add(bulletShooting);
 					orboShot(tower);
+					//shoot(tower, tower.getOrboTargeted());
 				}
 			}
-			lightTowerBulletFired = true;
 		}
 		if (e.getSource() == this.heavyTowerShooting) {
 			for (Tower tower : towersPlaced) {
 				if (tower instanceof HeavyTower && tower.isTargeted()) {
-					bullet.add(bulletShooting);
 					orboShot(tower);
+					//shoot(tower, tower.getOrboTargeted());
 				}
 			}
-			heavyTowerBulletFired = true;
 		}
 		this.repaint();
 	}
