@@ -59,6 +59,10 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private int dmgDone = 0;
 	private final int BUY_TIME = 10;
 	Tower selectedTower = null;
+	
+	private Tower ft = new FastTower();
+	private Tower lt = new LightTower();
+	private Tower ht = new HeavyTower();
 
 	Point xLocation = MouseInfo.getPointerInfo().getLocation();
 	Point yLocation = MouseInfo.getPointerInfo().getLocation();
@@ -263,7 +267,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		window.setVisible(true);
 
 		this.buyTimer = new Timer(1000, this);
-		this.orboSpawnTimer = new Timer(1000, this);
+		this.orboSpawnTimer = new Timer(1200, this);
 		this.orboMoveTimer = new Timer(1, this);
 		this.fastTowerShooting = new Timer(300, this);
 		this.lightTowerShooting = new Timer(800, this);
@@ -393,7 +397,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				}
 			}
 			if (isHeavyTowerPlaced) {
-				Tower ht = createHeavyTower(mousePlacedX, mousePlacedY);
 				if (ht.getPrice() <= money) {
 					towersPlaced.add(createHeavyTower(mousePlacedX, mousePlacedY));
 					money = money - ht.getPrice();
@@ -416,7 +419,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				}
 			}
 			if (isLightTowerPlaced) {
-				Tower lt = createNewLightTower(mousePlacedX, mousePlacedY);
 				if (lt.getPrice() <= money) {
 					towersPlaced.add(createNewLightTower(mousePlacedX, mousePlacedY));
 					money = money - lt.getPrice();
@@ -440,7 +442,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 			}
 			if (isFastTowerPlaced) {
-				Tower ft = createNewFastTower(mousePlacedX, mousePlacedY);
 				if (ft.getPrice() <= money) {
 					towersPlaced.add(createNewFastTower(mousePlacedX, mousePlacedY));
 					// }
@@ -524,14 +525,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 					}
 //					else{
 //						this.fastTowerShooting.stop();
-//					}
-					if (orbados.get(i).getxPos() >= (tower.getxPos() + (fastTower.getWidth() / 2)) + 300
-							|| orbados.get(i).getyPos() >= (tower.getyPos() + (fastTower.getHeight() / 2)) + 300
-							|| orbados.get(i).getxPos() <= (tower.getxPos() + (fastTower.getWidth() / 2)) - 300
-							|| orbados.get(i).getyPos() <= (tower.getyPos() + (fastTower.getHeight() / 2)) - 300){
-
-						tower.setTargeted(false);
-					} 
+//					} 
 				}
 			}
 
@@ -685,7 +679,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (e.getSource() == this.fastTowerShooting) {
 			for (Tower tower : towersPlaced) {
-				if (tower instanceof FastTower) {
+				if (tower instanceof FastTower && tower.isTargeted()) {
 					bullet.add(bulletShooting);
 					orboShot(tower);
 				}
@@ -694,7 +688,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (e.getSource() == this.lightTowerShooting) {
 			for (Tower tower : towersPlaced) {
-				if (tower instanceof LightTower) {
+				if (tower instanceof LightTower && tower.isTargeted()) {
 					bullet.add(bulletShooting);
 					orboShot(tower);
 				}
@@ -703,7 +697,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (e.getSource() == this.heavyTowerShooting) {
 			for (Tower tower : towersPlaced) {
-				if (tower instanceof HeavyTower) {
+				if (tower instanceof HeavyTower && tower.isTargeted()) {
 					bullet.add(bulletShooting);
 					orboShot(tower);
 				}
