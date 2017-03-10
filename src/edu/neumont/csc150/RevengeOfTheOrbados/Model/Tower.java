@@ -3,6 +3,7 @@ package edu.neumont.csc150.RevengeOfTheOrbados.Model;
 public class Tower {
 
 	private int health, price, dmg, upgradePrice, sellPrice, attackSpeed, xPos, yPos;
+	private Orbo orboTargeted;
 
 	/**
 	 * new default instance of parent class Tower
@@ -121,6 +122,20 @@ public class Tower {
 				return false;
 			}
 		}
+	}
+
+	/**
+	 * @return the orboTargeted
+	 */
+	public Orbo getOrboTargeted() {
+		return orboTargeted;
+	}
+
+	/**
+	 * @param orboTargeted the orboTargeted to set
+	 */
+	public void setOrboTargeted(Orbo orboTargeted) {
+		this.orboTargeted = orboTargeted;
 	}
 	
 }
