@@ -34,7 +34,7 @@ import edu.neumont.csc150.RevengeOfTheOrbados.Model.LightTower;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Orbo;
 import edu.neumont.csc150.RevengeOfTheOrbados.Model.Tower;
 
-public class Display extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
+public class Display extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
 
 	private GameManager game;
 	private boolean pause = false;
@@ -47,7 +47,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	private Random r = new Random();
 	private boolean isLightTowerSelected, isFastTowerSelected, isHeavyTowerSelected, isHeavyTowerPlaced,
 			isLightTowerPlaced, isFastTowerPlaced, isHeavyTowerClicked, isFastTowerClicked, inRange,
-			isLightTowerClicked = false, orboTargeted = false, buyPeriod;
+			isLightTowerClicked = false, orboTargeted = false, buyPeriod, gameOver;
 			
 	private boolean isMouseInGame = false;
 	private String isMouseInGameString = " ";
@@ -141,7 +141,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		window.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		window.addKeyListener(this);
 		window.setTitle("Revenge of the Orbados");
 		setBounds(new java.awt.Rectangle(0, 0, 2560, 1440));
 		setPreferredSize(new java.awt.Dimension(1920, 1080));
@@ -313,7 +312,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		super.paint(g);
 		long startPart = System.currentTimeMillis();
 		// square width = 90 height = 74
-		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), 1800, 1258, this);
+		g.drawImage(levelBackground, (jPanel1.getX() + 5), (jPanel2.getY() + 3), jPanel1.getWidth() - 40, jPanel1.getHeight() - 40, this);
 
 		for (Orbo orbo : orbados) {
 			g.setColor(orbo.getColor());
@@ -358,7 +357,9 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 
 		
 		 try { 
-			 checkForLoss(); 
+			 if(!gameOver){
+				 checkForLoss(); 
+			 }
 		 }
 		 catch (IOException e) {
 			 e.printStackTrace();
@@ -445,7 +446,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (isFastTowerPlaced) {
 				if (ft.getPrice() <= money) {
 					towersPlaced.add(createNewFastTower(mousePlacedX, mousePlacedY));
-					// }
 					money = money - ft.getPrice();
 					mousePlacedX = 0;
 					mousePlacedX = 0;
@@ -490,6 +490,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		for(Bullets bullet: bullets){
 			g.drawRect(bullet.getBulletX(), bullet.getBulletY(), 20, 20);
+			g.fillRect(bullet.getBulletX(), bullet.getBulletY(), 20, 20);
 		}
 		long endPaint = System.currentTimeMillis();
 		// System.out.println("Run of paint took " + (endPaint - startPart) + "
@@ -517,7 +518,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 		bullet.setBulletX(bullet.getBulletX() + xv);
 		double m = (orbo.getyPos() - tower.getyPos()) / (orbo.getxPos() - tower.getxPos());
 		int yv = (int) (m * xv);
-		bullet.setBulletY(bullet.getBulletX() + yv);
+		bullet.setBulletY(bullet.getBulletY() + yv);
 		bullets.add(bullet);
 	}
 
@@ -529,10 +530,12 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	 * @throws IOException
 	 */
 	public void checkForLoss() throws IOException {
-		if (towerHealth == 0) {
+		if (towerHealth <= 0) {
+			gameOver = true;
 			orbados.clear();
 			this.orboSpawnTimer.stop();
 			this.orboMoveTimer.stop();
+			this.buyTimer.stop();
 			Object options[] = { "Play Again", "Exit" };
 			int choice = JOptionPane.showOptionDialog(window, "Would you like to try again?", "Game Over",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -732,7 +735,7 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 			if (e.getX() > tower.getxPos() && e.getX() < tower.getxPos() + lightTower.getWidth()
 					&& e.getY() > tower.getyPos() && e.getY() < tower.getyPos() + lightTower.getHeight()) {
 				selectedTower = tower;
-				if (selectedTower.getPrice() < money) {
+				if (selectedTower.getUpgradePrice() <= money) {
 					jButton4.setEnabled(true);
 				} else {
 					jButton4.setEnabled(false);
@@ -740,12 +743,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 				}
 			} else {
 				jButton4.setEnabled(false);
-			}
-		}
-
-		if (e.getSource().equals(jButton4)) {
-			if(selectedTower.getPrice() < money && buyPeriod){
-				game.towerUpgrade(selectedTower);
 			}
 		}
 
@@ -919,33 +916,6 @@ public class Display extends JPanel implements ActionListener, KeyListener, Mous
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		if (e.getKeyCode() == 80) { // p
-			if (!pause) {
-				try {
-					Thread.currentThread().wait();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-			} else if (pause) {
-				Thread.currentThread().notify();
-			}
-		}
 	}
 
 }
